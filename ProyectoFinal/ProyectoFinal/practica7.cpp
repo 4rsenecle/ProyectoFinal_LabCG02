@@ -369,7 +369,7 @@ int main()
 		uniformView = shaderList[0].GetViewLocation();
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
-		
+
 		//información en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
@@ -380,7 +380,7 @@ int main()
 
 		// luz ligada a la cámara de tipo flash
 		//sirve para que en tiempo de ejecución (dentro del while) se cambien propiedades de la luz
-			glm::vec3 lowerLight = camera.getCameraPosition();
+		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
 		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 		//spotLights[1].SetPos(poscoche + glm::vec(x, y, cofre));
@@ -449,7 +449,7 @@ int main()
 		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Llanta_M.RenderModel();
-	
+
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 5.0f, 6.0));
@@ -459,7 +459,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Blackhawk_M.RenderModel();
 
-
+		
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-5.0f, 5.0f, 6.0));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
