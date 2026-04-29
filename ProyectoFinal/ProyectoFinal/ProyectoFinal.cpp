@@ -51,6 +51,28 @@ Texture AgaveTexture;
 Model Kitt_M;
 Model Llanta_M;
 Model Blackhawk_M;
+Model Sonic_Head;
+Model Sonic_Body;
+Model SonicRightArm;
+Model SonicRightElbow;
+Model SonicRightHand;
+Model SonicRightThumb;
+Model SonicRightIndex;
+Model SonicRightMiddle;
+Model SonicRightRing;
+Model SonicRightPinky;
+Model SonicRightKnee;
+Model SonicRightLeg;
+Model SonicLeftArm;
+Model SonicLeftElbow;
+Model SonicLeftHand;
+Model SonicLeftThumb;
+Model SonicLeftIndex;
+Model SonicLeftMiddle;
+Model SonicLeftRing;
+Model SonicLeftPinky;
+Model SonicLeftKnee;
+Model SonicLeftLeg;
 
 
 Skybox skybox;
@@ -292,6 +314,52 @@ int main()
 	Llanta_M.LoadModel("Models/llanta_optimizada.obj");
 	Blackhawk_M = Model();
 	Blackhawk_M.LoadModel("Models/uh60.obj");
+
+	// MODELO: SONIC
+	Sonic_Head = Model();
+	Sonic_Head.LoadModel("Models/rewrite-sonic/source/SonicHead.obj");
+	Sonic_Body = Model();
+	Sonic_Body.LoadModel("Models/rewrite-sonic/source/SonicBody.obj");
+	SonicRightArm = Model();
+	SonicRightArm.LoadModel("Models/rewrite-sonic/source/SonicRightArm.obj");
+	SonicRightElbow = Model();
+	SonicRightElbow.LoadModel("Models/rewrite-sonic/source/SonicRightElbow.obj");
+	SonicRightHand = Model();
+	SonicRightHand.LoadModel("Models/rewrite-sonic/source/SonicRightHand.obj");
+	SonicRightThumb = Model();
+	SonicRightThumb.LoadModel("Models/rewrite-sonic/source/SonicRightThumb.obj");
+	SonicRightIndex = Model();
+	SonicRightIndex.LoadModel("Models/rewrite-sonic/source/SonicRightIndex.obj");
+	SonicRightMiddle = Model();
+	SonicRightMiddle.LoadModel("Models/rewrite-sonic/source/SonicRightMiddle.obj");
+	SonicRightRing = Model();
+	SonicRightRing.LoadModel("Models/rewrite-sonic/source/SonicRightRing.obj");
+	SonicRightPinky = Model();
+	SonicRightPinky.LoadModel("Models/rewrite-sonic/source/SonicRightPinky.obj");
+	SonicRightKnee = Model();
+	SonicRightKnee.LoadModel("Models/rewrite-sonic/source/SonicRightKnee.obj");
+	SonicRightLeg = Model();
+	SonicRightLeg.LoadModel("Models/rewrite-sonic/source/SonicRightLeg.obj");
+	SonicLeftArm = Model();
+	SonicLeftArm.LoadModel("Models/rewrite-sonic/source/SonicLeftArm.obj");
+	SonicLeftElbow = Model();
+	SonicLeftElbow.LoadModel("Models/rewrite-sonic/source/SonicLeftElbow.obj");
+	SonicLeftHand = Model();
+	SonicLeftHand.LoadModel("Models/rewrite-sonic/source/SonicLeftHand.obj");
+	SonicLeftThumb = Model();
+	SonicLeftThumb.LoadModel("Models/rewrite-sonic/source/SonicLeftThumb.obj");
+	SonicLeftIndex = Model();
+	SonicLeftIndex.LoadModel("Models/rewrite-sonic/source/SonicLeftIndex.obj");
+	SonicLeftMiddle = Model();
+	SonicLeftMiddle.LoadModel("Models/rewrite-sonic/source/SonicLeftMiddle.obj");
+	SonicLeftRing = Model();
+	SonicLeftRing.LoadModel("Models/rewrite-sonic/source/SonicLeftRing.obj");
+	SonicLeftPinky = Model();
+	SonicLeftPinky.LoadModel("Models/rewrite-sonic/source/SonicLeftPinky.obj");
+	SonicLeftKnee = Model();
+	SonicLeftKnee.LoadModel("Models/rewrite-sonic/source/SonicLeftKnee.obj");
+	SonicLeftLeg = Model();
+	SonicLeftLeg.LoadModel("Models/rewrite-sonic/source/SonicLeftLeg.obj");
 	
 
 	std::vector<std::string> skyboxFaces;
@@ -459,12 +527,54 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Blackhawk_M.RenderModel();
 
-		
+
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-5.0f, 5.0f, 6.0));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		
+
 		meshList[4]->RenderMesh();
+
+		// SONIC
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(30.0f, 0.0f, 15.0f));
+		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
+		modelaux = model;
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Sonic_Body.RenderModel();
+
+		// SONIC: CABEZA
+		model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Sonic_Head.RenderModel();
+		model = modelaux;
+
+		// SONIC: CODO IZQUIERDO
+		model = glm::translate(model, glm::vec3(0.2f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SonicLeftElbow.RenderModel();
+
+		// SONIC: BRAZO IZQUIERDO
+		model = glm::translate(model, glm::vec3(0.2f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SonicLeftArm.RenderModel();
+
+		// SONIC: MANO IZQUIERDA
+
+		// SONIC: PULGAR IZQUIERDO
+
+		// SONIC: ÍNDICE IZQUIERDO
+
+		// SONIC: MEDIO IZQUIERDO
+
+		// SONIC: ANULAR IZQUIERDO
+
+		// SONIC: MEÑIQUE IZQUIERDO
+
+		// SONIC: RODILLA IZQUIERDA
+
+		// SONIC: RODILLA DERECHA
 
 		//Agave ¿qué sucede si lo renderizan antes del coche y el helicóptero?
 		model = glm::mat4(1.0);
