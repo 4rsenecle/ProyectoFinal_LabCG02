@@ -73,9 +73,11 @@ Model SonicLeftRing;
 Model SonicLeftPinky;
 Model SonicLeftKnee;
 Model SonicLeftLeg;
+Model LampPost;
 
 
-Skybox skybox;
+Skybox skybox_day;
+Skybox skybox_night;
 
 //materiales
 Material Material_brillante;
@@ -360,24 +362,36 @@ int main()
 	SonicLeftKnee.LoadModel("Models/rewrite-sonic/source/SonicLeftKnee.obj");
 	SonicLeftLeg = Model();
 	SonicLeftLeg.LoadModel("Models/rewrite-sonic/source/SonicLeftLeg.obj");
+
+	// MODELOS: Elementos 
+	LampPost = Model();
+	LampPost.LoadModel("Models/LampPost.obj");
 	
 
-	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
+	std::vector<std::string> skyboxFacesDay, skyboxFacesNight;
+	skyboxFacesDay.push_back("Textures/Skybox/cupertin-lake_rt.tga");
+	skyboxFacesDay.push_back("Textures/Skybox/cupertin-lake_lf.tga");
+	skyboxFacesDay.push_back("Textures/Skybox/cupertin-lake_dn.tga");
+	skyboxFacesDay.push_back("Textures/Skybox/cupertin-lake_up.tga");
+	skyboxFacesDay.push_back("Textures/Skybox/cupertin-lake_bk.tga");
+	skyboxFacesDay.push_back("Textures/Skybox/cupertin-lake_ft.tga");
 
-	skybox = Skybox(skyboxFaces);
+	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake-night_rt.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake-night_lf.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake-night_dn.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake-night_up.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake-night_bk.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake-night_ft.tga");
+
+	skybox_day = Skybox(skyboxFacesDay);
+	skybox_night = Skybox(skyboxFacesNight);
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
 
 
 	//luz direccional, sólo 1 y siempre debe de existir
-	mainLight = DirectionalLight(0.0f, 1.0f, 1.0f,
+	mainLight = DirectionalLight(1.0f, 1.0f, 0.75f,
 		0.3f, 0.3f,
 		0.0f, -1.0f, 0.0f);
 	//contador de luces puntuales
@@ -387,6 +401,14 @@ int main()
 		0.0f, 1.0f,
 		-6.0f, 1.5f, 1.5f,
 		0.3f, 0.2f, 0.1f);
+	pointLightCount++;
+
+	// luz de la lampara
+	pointLights[1] = PointLight(1.0f, 1.0f, 1.0f,
+		5.0f, 0.1f,
+		20.5f, 8.0f, 7.0f,
+		1.0f, 0.3f, 0.02f
+	);
 	pointLightCount++;
 
 	unsigned int spotLightCount = 0;
@@ -430,7 +452,16 @@ int main()
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+		if (mainWindow.getDayNight() == 0) {
+			skybox_day.DrawSkybox(camera.calculateViewMatrix(), projection);
+			mainLight.changeLight(1.0f, 1.0f, 0.75f);
+		}else 
+		{
+			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
+			mainLight.changeLight(0.735f, 0.1f, 0.865f);
+		}
+
+		
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
@@ -468,7 +499,6 @@ int main()
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 
 		pisoTexture.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
@@ -575,6 +605,15 @@ int main()
 		// SONIC: RODILLA IZQUIERDA
 
 		// SONIC: RODILLA DERECHA
+
+		// programación del faro
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(20.5f, -0.75f, 7.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		LampPost.RenderModel();
+		model = modelaux;
 
 		//Agave ¿qué sucede si lo renderizan antes del coche y el helicóptero?
 		model = glm::mat4(1.0);

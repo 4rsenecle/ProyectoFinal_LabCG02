@@ -112,6 +112,14 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		theWindow-> muevex -= 1.0;
 	}
+	if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
+		if (theWindow->day_night == 0) {
+			theWindow->day_night = 1;
+		}
+		else if (theWindow->day_night == 1) {
+			theWindow->day_night = 0;
+		}
+	}
 
 
 
