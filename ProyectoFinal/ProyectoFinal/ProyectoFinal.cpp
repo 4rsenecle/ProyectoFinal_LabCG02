@@ -1,5 +1,5 @@
 /*
-Práctica 7: Iluminación 1 
+Prï¿½ctica 7: Iluminaciï¿½n 1 
 */
 //para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
@@ -10,12 +10,12 @@ Práctica 7: Iluminación 1
 #include <vector>
 #include <math.h>
 
-#include <glew.h>
-#include <glfw3.h>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-#include <glm.hpp>
-#include <gtc\matrix_transform.hpp>
-#include <gtc\type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 //para probar el importer
 //#include<assimp/Importer.hpp>
 
@@ -28,7 +28,7 @@ Práctica 7: Iluminación 1
 #include"Model.h"
 #include "Skybox.h"
 
-//para iluminación
+//para iluminaciï¿½n
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
@@ -74,6 +74,7 @@ Model SonicLeftPinky;
 Model SonicLeftKnee;
 Model SonicLeftLeg;
 Model LampPost;
+Model Emil_Test;
 
 
 Skybox skybox_day;
@@ -102,7 +103,7 @@ static const char* vShader = "shaders/shader_light.vert";
 static const char* fShader = "shaders/shader_light.frag";
 
 
-//función de calculo de normales por promedio de vértices 
+//funciï¿½n de calculo de normales por promedio de vï¿½rtices 
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
 	unsigned int vLength, unsigned int normalOffset)
 {
@@ -362,6 +363,8 @@ int main()
 	SonicLeftKnee.LoadModel("Models/rewrite-sonic/source/SonicLeftKnee.obj");
 	SonicLeftLeg = Model();
 	SonicLeftLeg.LoadModel("Models/rewrite-sonic/source/SonicLeftLeg.obj");
+	Emil_Test = Model();
+	Emil_Test.LoadModel("Models/Emil.obj");
 
 	// MODELOS: Elementos 
 	LampPost = Model();
@@ -390,13 +393,13 @@ int main()
 	Material_opaco = Material(0.3f, 4);
 
 
-	//luz direccional, sólo 1 y siempre debe de existir
+	//luz direccional, sï¿½lo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 0.75f,
 		0.3f, 0.3f,
 		0.0f, -1.0f, 0.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
-	//Declaración de primer luz puntual
+	//Declaraciï¿½n de primer luz puntual
 	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f,
 		-6.0f, 1.5f, 1.5f,
@@ -469,7 +472,7 @@ int main()
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
 
-		//información en el shader de intensidad especular y brillo
+		//informaciï¿½n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
@@ -477,14 +480,14 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		// luz ligada a la cámara de tipo flash
-		//sirve para que en tiempo de ejecución (dentro del while) se cambien propiedades de la luz
+		// luz ligada a la cï¿½mara de tipo flash
+		//sirve para que en tiempo de ejecuciï¿½n (dentro del while) se cambien propiedades de la luz
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
 		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 		//spotLights[1].SetPos(poscoche + glm::vec(x, y, cofre));
 
-		//información al shader de fuentes de iluminación
+		//informaciï¿½n al shader de fuentes de iluminaciï¿½n
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
@@ -594,19 +597,19 @@ int main()
 
 		// SONIC: PULGAR IZQUIERDO
 
-		// SONIC: ÍNDICE IZQUIERDO
+		// SONIC: ï¿½NDICE IZQUIERDO
 
 		// SONIC: MEDIO IZQUIERDO
 
 		// SONIC: ANULAR IZQUIERDO
 
-		// SONIC: MEÑIQUE IZQUIERDO
+		// SONIC: MEï¿½IQUE IZQUIERDO
 
 		// SONIC: RODILLA IZQUIERDA
 
 		// SONIC: RODILLA DERECHA
 
-		// programación del faro
+		// programaciï¿½n del faro
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(20.5f, -0.75f, 7.0f));
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
@@ -615,7 +618,15 @@ int main()
 		LampPost.RenderModel();
 		model = modelaux;
 
-		//Agave ¿qué sucede si lo renderizan antes del coche y el helicóptero?
+
+		//Modelo de Emil (No esta terminado)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 15.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Test.RenderModel();
+
+		//Agave ï¿½quï¿½ sucede si lo renderizan antes del coche y el helicï¿½ptero?
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -4.0f));
 		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
