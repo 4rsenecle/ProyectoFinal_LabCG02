@@ -120,6 +120,9 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 			theWindow->day_night = 0;
 		}
 	}
+	if (key == GLFW_KEY_L && action == GLFW_PRESS) {
+		theWindow->moveLampPost = 1;
+	}
 
 
 

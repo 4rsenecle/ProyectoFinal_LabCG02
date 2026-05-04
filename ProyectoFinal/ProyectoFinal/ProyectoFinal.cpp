@@ -73,7 +73,7 @@ Model SonicLeftRing;
 Model SonicLeftPinky;
 Model SonicLeftKnee;
 Model SonicLeftLeg;
-Model LampPost;
+Model LampPostUpper, LampPostLower;
 
 
 Skybox skybox_day;
@@ -87,6 +87,10 @@ Material Material_opaco;
 //Sphere cabeza = Sphere(0.5, 20, 20);
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
+GLfloat postSpin = 0.0f;
+GLfloat spinTimer = 0.0f;
+GLfloat spinLightX = 0.0f;
+GLfloat spinLightY = 0.0f;
 static double limitFPS = 1.0 / 60.0;
 
 // luz direccional
@@ -364,8 +368,10 @@ int main()
 	SonicLeftLeg.LoadModel("Models/rewrite-sonic/source/SonicLeftLeg.obj");
 
 	// MODELOS: Elementos 
-	LampPost = Model();
-	LampPost.LoadModel("Models/LampPost.obj");
+	LampPostLower = Model();
+	LampPostLower.LoadModel("Models/LampPostBody.obj");
+	LampPostUpper = Model();
+	LampPostUpper.LoadModel("Models/LampPostPole.obj");
 	
 
 	std::vector<std::string> skyboxFacesDay, skyboxFacesNight;
@@ -404,12 +410,13 @@ int main()
 	pointLightCount++;
 
 	// luz de la lampara
-	pointLights[1] = PointLight(1.0f, 1.0f, 1.0f,
+	pointLights[1] = PointLight(0.75f, 0.8f, 1.0f,
 		5.0f, 0.1f,
 		20.5f, 8.0f, 7.0f,
 		1.0f, 0.3f, 0.02f
 	);
 	pointLightCount++;
+
 
 	unsigned int spotLightCount = 0;
 	//linterna
@@ -610,9 +617,17 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(20.5f, -0.75f, 7.0f));
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		LampPostLower.RenderModel();
+		//model = modelaux;
+
+		//lámpara del paro
+		model = glm::translate(model, glm::vec3(-0.3f, 7.3f, 0.6f));
+		//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		model = glm::rotate(model, postSpin * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		LampPost.RenderModel();
+		LampPostUpper.RenderModel();
 		model = modelaux;
 
 		//Agave ¿qué sucede si lo renderizan antes del coche y el helicóptero?
@@ -628,6 +643,32 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[3]->RenderMesh();
 		glDisable(GL_BLEND);
+
+		if (mainWindow.getMoveLampPost() == 1) {
+			
+			spinTimer += 1.0f;
+			postSpin += 2.0f;
+			spinLightX = 1.75f * -sin(1*postSpin * toRadians);
+			spinLightY = 1.75f * cos(1*postSpin * toRadians) - 1.75f;
+			pointLights[1].updatePosition(glm::vec3(20.5f + spinLightX, 8.0f + spinLightY, 7.0f));
+			
+			/*
+			// Bloque para hacer debugging
+			spinTimer += 0.0f;
+			postSpin += 0.0f;
+			spinLightX = 1.75f * -sin(1 * spinTimer * toRadians);
+			spinLightY = 1.75f * cos(1 * spinTimer * toRadians) - 1.75f;
+			pointLights[1].updatePosition(glm::vec3(20.5f + spinLightX, 8.0f + spinLightY, 7.0f));
+			*/
+			
+			if (spinTimer == 1080) {
+				mainWindow.setMoveLampPost(0);
+				spinTimer = 0;
+				pointLights[1].updatePosition(glm::vec3(20.5f, 8.0f, 7.0f));
+				postSpin = 0;
+			}
+			
+		}
 
 		glUseProgram(0);
 

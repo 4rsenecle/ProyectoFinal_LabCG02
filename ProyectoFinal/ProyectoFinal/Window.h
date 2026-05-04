@@ -19,6 +19,8 @@ public:
 	bool* getsKeys() { return keys; }
 	void swapBuffers() { return glfwSwapBuffers(mainWindow); }
 	GLint getDayNight() { return day_night; }
+	GLint getMoveLampPost() { return moveLampPost; }
+	void setMoveLampPost(GLint value) { moveLampPost = value; }
 
 	
 	~Window();
@@ -34,6 +36,7 @@ private:
 	GLfloat yChange;
 	GLfloat muevex;
 	GLint day_night = 0;
+	GLint moveLampPost = 0;
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);
