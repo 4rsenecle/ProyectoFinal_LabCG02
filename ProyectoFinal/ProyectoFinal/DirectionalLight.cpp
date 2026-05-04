@@ -27,6 +27,10 @@ void DirectionalLight::changeLight(GLfloat newRed, GLfloat newGreen, GLfloat new
 	color = glm::vec3(newRed, newGreen, newBlue);
 }
 
+void DirectionalLight::setDirection(glm::vec3 newDirection) {
+	direction = newDirection;
+}
+
 DirectionalLight::~DirectionalLight()
 {
 }

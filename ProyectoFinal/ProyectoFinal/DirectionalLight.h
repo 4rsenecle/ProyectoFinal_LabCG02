@@ -15,6 +15,8 @@ public:
 
 	void changeLight(GLfloat newRed, GLfloat newGreen, GLfloat newBlue);
 
+	void setDirection(glm::vec3 newDirection);
+
 	~DirectionalLight();
 
 	

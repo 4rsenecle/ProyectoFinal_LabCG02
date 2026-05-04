@@ -19,6 +19,7 @@ public:
 	bool* getsKeys() { return keys; }
 	void swapBuffers() { return glfwSwapBuffers(mainWindow); }
 	GLint getDayNight() { return day_night; }
+	void setDayNight(GLint value) {day_night = value; }
 	GLint getMoveLampPost() { return moveLampPost; }
 	GLint getCamType() { return camType; }
 	void setMoveLampPost(GLint value) { moveLampPost = value; }

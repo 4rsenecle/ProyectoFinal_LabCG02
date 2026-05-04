@@ -88,9 +88,15 @@ Material Material_opaco;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 GLfloat postSpin = 0.0f;
+GLfloat postScaleX = 0.0f;
+GLfloat postScaleY = 0.0f;
+GLfloat postScaleZ = 0.0f;
 GLfloat spinTimer = 0.0f;
 GLfloat spinLightX = 0.0f;
 GLfloat spinLightY = 0.0f;
+GLfloat dirTimer = 0.0f;
+GLfloat moveDirectionalX = 0.0f;
+GLfloat moveDirectionalY = 0.0f;
 static double limitFPS = 1.0 / 60.0;
 
 // Banderas de cámara
@@ -423,7 +429,7 @@ int main()
 
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 0.75f,
-		0.5f, 0.5f,
+		0.1f, 1.5f,
 		0.0f, -1.0f, 0.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
@@ -442,8 +448,9 @@ int main()
 	);
 	pointLightCount++;
 
-
+	
 	unsigned int spotLightCount = 0;
+	/*
 	//linterna
 	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
 		0.0f, 2.0f,
@@ -461,7 +468,7 @@ int main()
 		1.0f, 0.0f, 0.0f,
 		15.0f);
 	spotLightCount++;
-	
+	*/
 	//se crean mas luces puntuales y spotlight 
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
@@ -698,7 +705,7 @@ int main()
 		// programación del faro
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(20.5f, -0.75f, 7.0f));
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		model = glm::scale(model, glm::vec3(0.5f + postScaleX, 0.5f + postScaleY, 0.5f + postScaleZ));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		LampPostLower.RenderModel();
 		//model = modelaux;
@@ -729,11 +736,45 @@ int main()
 		if (mainWindow.getMoveLampPost() == 1) {
 			
 			spinTimer += 1.0f;
-			postSpin += 2.0f;
-			spinLightX = 1.75f * -sin(1*postSpin * toRadians);
-			spinLightY = 1.75f * cos(1*postSpin * toRadians) - 1.75f;
-			pointLights[1].updatePosition(glm::vec3(20.5f + spinLightX, 8.0f + spinLightY, 7.0f));
+
+			if (spinTimer < 360) {
+				postScaleX += 0.0002f;
+				postScaleY -= 0.0004f;
+				postScaleZ += 0.0002f;
+			}
+
+			if (spinTimer > 360 && spinTimer < 1440) {
+				if (postScaleX > 0) {
+					postScaleX -= 0.002f;
+				}
+				if (postScaleY < 0) {
+					postScaleY += 0.004f;
+				}
+				if (postScaleZ > 0) {
+					postScaleZ -= 0.002f;
+				}
+
+				if (spinTimer > 396 && spinTimer < 480) {
+					postScaleX -= 0.003f;
+					postScaleY += 0.006f;
+					postScaleZ -= 0.003f;
+				}
+
+				if (spinTimer > 480 && spinTimer < 600) {
+					postScaleX += 0.003f;
+					postScaleY -= 0.006f;
+					postScaleZ += 0.003f;
+				}
+
+				postSpin += 2.0f;
+				spinLightX = 1.75f * -sin(1 * postSpin * toRadians);
+				spinLightY = 1.75f * cos(1 * postSpin * toRadians) - 1.75f;
+				pointLights[1].updatePosition(glm::vec3(20.5f + spinLightX, 8.0f + spinLightY, 7.0f));
+				
+				
+			}
 			
+
 			/*
 			// Bloque para hacer debugging
 			spinTimer += 0.0f;
@@ -743,14 +784,40 @@ int main()
 			pointLights[1].updatePosition(glm::vec3(20.5f + spinLightX, 8.0f + spinLightY, 7.0f));
 			*/
 			
-			if (spinTimer == 1080) {
+			if (spinTimer == 1440) {
 				mainWindow.setMoveLampPost(0);
 				spinTimer = 0;
 				pointLights[1].updatePosition(glm::vec3(20.5f, 8.0f, 7.0f));
 				postSpin = 0;
+				postScaleX = postScaleY = postScaleZ = 0;
 			}
 			
 		}
+
+		// cambia la luz cada 2 minutos
+		mainLight.setDirection(glm::vec3(moveDirectionalX,moveDirectionalY,0.0f));
+		if (dirTimer == 36000 && mainWindow.getDayNight() == 0) {
+			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
+			mainLight.changeLight(1.0f, 0.875f, 0.8f);
+			mainWindow.setDayNight(1);
+			dirTimer = 0;
+		}
+		else if (dirTimer == 360 && mainWindow.getDayNight() == 1) {
+			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
+			mainLight.changeLight(0.800f, 0.5f, 0.965f);
+			mainWindow.setDayNight(0);
+			dirTimer = 0;
+		}
+
+		// define hacia dónde se mueve la luz dependiendo de si es de noche o de día
+		if (mainWindow.getDayNight() == 0) {
+			dirTimer += 1.0f;
+		}
+		else {
+			dirTimer -= 1.0f;
+		}
+		moveDirectionalX = cos(0.0001f*dirTimer);
+		moveDirectionalY = -sin(0.0001f* dirTimer);
 
 		glUseProgram(0);
 
