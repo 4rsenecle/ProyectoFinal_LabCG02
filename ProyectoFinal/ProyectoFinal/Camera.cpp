@@ -41,6 +41,31 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 	}
 }
 
+void Camera::keyControlViewAbove(bool* keys, GLfloat deltaTime)
+{
+	GLfloat velocity = moveSpeed * deltaTime;
+
+	if (keys[GLFW_KEY_W])
+	{
+		position += up * velocity;
+	}
+
+	if (keys[GLFW_KEY_S])
+	{
+		position -= up * velocity;
+	}
+
+	if (keys[GLFW_KEY_A])
+	{
+		position -= right * velocity;
+	}
+
+	if (keys[GLFW_KEY_D])
+	{
+		position += right * velocity;
+	}
+}
+
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 {
 	xChange *= turnSpeed;
@@ -48,6 +73,25 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 
 	yaw += xChange;
 	pitch += yChange;
+
+	if (pitch > 89.0f)
+	{
+		pitch = 89.0f;
+	}
+
+	if (pitch < -89.0f)
+	{
+		pitch = -89.0f;
+	}
+
+	update();
+}
+
+void Camera::mouseControlLocked(GLfloat xChange)
+{
+	xChange *= turnSpeed;
+
+	yaw += xChange;
 
 	if (pitch > 89.0f)
 	{

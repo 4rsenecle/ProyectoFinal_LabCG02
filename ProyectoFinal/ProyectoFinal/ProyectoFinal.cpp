@@ -93,6 +93,12 @@ GLfloat spinLightX = 0.0f;
 GLfloat spinLightY = 0.0f;
 static double limitFPS = 1.0 / 60.0;
 
+// Banderas de cámara
+GLint cam1 = 0;
+GLint cam2 = 0;
+GLint cam3 = 0;
+GLint camDebug = 0;
+
 // luz direccional
 DirectionalLight mainLight;
 //para declarar varias luces de tipo pointlight
@@ -417,7 +423,7 @@ int main()
 
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 0.75f,
-		0.3f, 0.3f,
+		0.5f, 0.5f,
 		0.0f, -1.0f, 0.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
@@ -472,19 +478,76 @@ int main()
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
-		camera.keyControl(mainWindow.getsKeys(), deltaTime);
-		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+		// Se activa una sola cámara.
+		// También se introduce una guardia para el tipo de cámara, para poder cambiar la posición una sola vez.
+		// Cámara 1: Moverse en el plano XZ en tercera persona
+		// TODO: Implementar movimiento del personaje.
+		if (mainWindow.getCamType() == 1) {
+			if (cam1 == 0) {
+				camera.setCameraPosition(glm::vec3(0.0f, 3.0f, 0.0f));
+				camera.setFront(glm::vec3(0.0f, 0.0f, 1.0f));
+				cam1 = 1;
+			}
+			camera.mouseControlLocked(mainWindow.getXChange());
+			camera.keyControl(mainWindow.getsKeys(), deltaTime);
+			cam2 = 0;
+			cam3 = 0;
+			camDebug = 0;
+			/* funcionaba como debug.
+			printf("FRONT ACTUAL: ");
+			printf("%f %f %f", camera.getFront().x, camera.getFront().y, camera.getFront().z);
+			printf("\n");
+			*/
+		}
+		// Cámara que mira desde arriba.
+		else if (mainWindow.getCamType() == 2) {
+			if (cam2 == 0) {
+				camera.setCameraPosition(glm::vec3(0.0f, 70.0f, 0.0f));
+				camera.setFront(glm::vec3(0.0f, -1.0f, 0.00001f));
+				camera.setRight(glm::vec3(0.0f, 0.0f, 1.0f));
+				camera.setUp(glm::vec3(1.0f, 0.0f, 0.0f));
+				cam2 = 1;
+			}
+			camera.keyControlViewAbove(mainWindow.getsKeys(), deltaTime);
+			cam1 = 0;
+			cam3 = 0;
+			camDebug = 0;
+		}
+		else if (mainWindow.getCamType() == 3) {
+			// Muestra de elemento de escenario con SET.
+		}
+		else if (mainWindow.getCamType() == 4) {
+			// Muestra de elemento de escenario con SET.
+		}
+		else if (mainWindow.getCamType() == 5) {
+			// Muestra de elemento de escenario con SET.
+		}
+		// Podemos implementar más sin problemas.
+
+		// Cámara de debug, las demás cámaras son fáciles pues solo es un set. 
+		else if (mainWindow.getCamType() == 0) {
+			if (camDebug == 0) {
+				camera.setCameraPosition(glm::vec3(0.0f, 3.0f, 0.0f));
+				camDebug = 1;
+			}
+			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+			camera.keyControl(mainWindow.getsKeys(), deltaTime);
+			cam1 = 0;
+			cam2 = 0;
+			cam3 = 0;
+		}
+		
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		if (mainWindow.getDayNight() == 0) {
 			skybox_day.DrawSkybox(camera.calculateViewMatrix(), projection);
-			mainLight.changeLight(1.0f, 1.0f, 0.75f);
+			mainLight.changeLight(1.0f, 0.875f, 0.8f);
 		}else 
 		{
 			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
-			mainLight.changeLight(0.735f, 0.1f, 0.865f);
+			mainLight.changeLight(0.800f, 0.5f, 0.965f);
 		}
 
 		

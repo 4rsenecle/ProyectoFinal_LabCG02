@@ -112,6 +112,7 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		theWindow-> muevex -= 1.0;
 	}
+	// Control de skybox 
 	if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
 		if (theWindow->day_night == 0) {
 			theWindow->day_night = 1;
@@ -120,8 +121,24 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 			theWindow->day_night = 0;
 		}
 	}
+
+	// Control de cámara
 	if (key == GLFW_KEY_L && action == GLFW_PRESS) {
 		theWindow->moveLampPost = 1;
+	}
+
+	if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
+		theWindow->camType = 1;
+	}
+	if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
+		theWindow->camType = 2;
+	}
+	if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
+		theWindow->camType = 3;
+	}
+	// Modo extra que sirve a forma de debuggear
+	if (key == GLFW_KEY_0 && action == GLFW_PRESS) {
+		theWindow->camType = 0;
 	}
 
 

@@ -15,10 +15,18 @@ public:
 
 	void keyControl(bool* keys, GLfloat deltaTime);
 	void mouseControl(GLfloat xChange, GLfloat yChange);
+	void mouseControlLocked(GLfloat xChange);
 
 	glm::vec3 getCameraPosition();
 	glm::vec3 getCameraDirection();
 	glm::mat4 calculateViewMatrix();
+
+	glm::vec3 getFront() { return front; }
+	void setCameraPosition(glm::vec3 newPosition) { position = newPosition; }
+	void setFront(glm::vec3 newFront) { front = newFront; }
+	void setRight(glm::vec3 newRight) { right = newRight; }
+	void setUp(glm::vec3 newUp) { up = newUp; }
+	void keyControlViewAbove(bool* keys, GLfloat deltaTime);
 
 	~Camera();
 
