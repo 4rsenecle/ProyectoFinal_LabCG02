@@ -1,15 +1,25 @@
-# Blender 5.1.1 MTL File: 'icanrecall.blend'
+# Blender 5.1.1 MTL File: 'Rewrite_Sonic_edited.blend'
 # www.blender.org
 
 newmtl Mat.001
 Ns 936.187012
 Ka 1.000000 1.000000 1.000000
-Kd 0.012287 0.012287 0.644491
 Ks 0.640000 0.640000 0.640000
 Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
+map_Kd sonic_blue.jpeg
+
+newmtl Mat.2
+Ns 422.242493
+Ka 1.000000 1.000000 1.000000
+Kd 0.303448 0.257931 0.272345
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
 
 newmtl Mat.5
 Ns 437.057281

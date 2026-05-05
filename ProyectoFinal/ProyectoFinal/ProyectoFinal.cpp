@@ -103,6 +103,8 @@ GLfloat moveDirectionalY = 0.0f;
 // articulaciones de Sonic
 GLfloat leftShoulderArt = 0.0f;
 GLfloat leftArmArt = 0.0f;
+GLfloat rightShoulderArt = 0.0f;
+GLfloat rightArmArt = 0.0f;
 static double limitFPS = 1.0 / 60.0;
 
 // Banderas de cámara
@@ -668,8 +670,8 @@ int main()
 
 		// SONIC
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(30.0f, 2.0f, 15.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.00f, 1.0f));
+		model = glm::translate(model, glm::vec3(30.0f, 3.0f, 15.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		modelaux = model;
 		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -702,19 +704,51 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SonicLeftHand.RenderModel();
 
-		// SONIC: PULGAR IZQUIERDO
-
-		// SONIC: ÍNDICE IZQUIERDO
-
-		// SONIC: MEDIO IZQUIERDO
-
-		// SONIC: ANULAR IZQUIERDO
-
-		// SONIC: MEÑIQUE IZQUIERDO
-
 		// SONIC: RODILLA IZQUIERDA
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.32f, -0.3f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SonicLeftKnee.RenderModel();
+
+		// SONIC: PIERNA IZQUIERDA
+		model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SonicLeftLeg.RenderModel();
+		
+
+		// SONIC: CODO DERECHO Y ARTICULACIÓN
+		model = modelaux;
+
+		model = glm::translate(model, glm::vec3(-0.4f, 0.1f, 0.0f));
+		model = glm::rotate(model, 40.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, rightShoulderArt * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SonicRightElbow.RenderModel();
+
+		// SONIC: BRAZO DERECHO Y ARTICULACION
+		model = glm::translate(model, glm::vec3(-0.75f, 0.0f, 0.0f));
+		model = glm::rotate(model, rightArmArt * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SonicRightArm.RenderModel();
+
+		// SONIC: MANO DERECHA
+		model = glm::translate(model, glm::vec3(-0.7f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SonicRightHand.RenderModel();
 
 		// SONIC: RODILLA DERECHA
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.32f, -0.3f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SonicLeftKnee.RenderModel();
+
+		// SONIC: PIERNA DERECHA
+		model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SonicLeftLeg.RenderModel();
+
 
 		// programación del faro
 		model = glm::mat4(1.0);
