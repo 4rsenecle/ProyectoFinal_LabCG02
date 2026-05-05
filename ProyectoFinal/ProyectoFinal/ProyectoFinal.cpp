@@ -87,6 +87,7 @@ Material Material_opaco;
 //Sphere cabeza = Sphere(0.5, 20, 20);
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
+// animación de la lámpara (Sonic)
 GLfloat postSpin = 0.0f;
 GLfloat postScaleX = 0.0f;
 GLfloat postScaleY = 0.0f;
@@ -94,9 +95,14 @@ GLfloat postScaleZ = 0.0f;
 GLfloat spinTimer = 0.0f;
 GLfloat spinLightX = 0.0f;
 GLfloat spinLightY = 0.0f;
+// temporizador de luz direccional
 GLfloat dirTimer = 0.0f;
 GLfloat moveDirectionalX = 0.0f;
 GLfloat moveDirectionalY = 0.0f;
+
+// articulaciones de Sonic
+GLfloat leftShoulderArt = 0.0f;
+GLfloat leftArmArt = 0.0f;
 static double limitFPS = 1.0 / 60.0;
 
 // Banderas de cámara
@@ -662,8 +668,8 @@ int main()
 
 		// SONIC
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(30.0f, 0.0f, 15.0f));
-		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
+		model = glm::translate(model, glm::vec3(30.0f, 2.0f, 15.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.00f, 1.0f));
 		modelaux = model;
 		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -671,22 +677,30 @@ int main()
 		Sonic_Body.RenderModel();
 
 		// SONIC: CABEZA
-		model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Sonic_Head.RenderModel();
 		model = modelaux;
 
-		// SONIC: CODO IZQUIERDO
-		model = glm::translate(model, glm::vec3(0.2f, 0.0f, 0.0f));
+		// SONIC: CODO IZQUIERDO Y ARTICULACIÓN
+		model = glm::translate(model, glm::vec3(0.35f, 0.2f, 0.0f));
+		model = glm::rotate(model, -40.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, leftShoulderArt * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SonicLeftElbow.RenderModel();
 
-		// SONIC: BRAZO IZQUIERDO
-		model = glm::translate(model, glm::vec3(0.2f, 0.0f, 0.0f));
+		// SONIC: BRAZO IZQUIERDO Y ARTICULACION
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		model = glm::rotate(model, leftArmArt * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SonicLeftArm.RenderModel();
 
 		// SONIC: MANO IZQUIERDA
+		model = glm::translate(model, glm::vec3(1.3f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SonicLeftHand.RenderModel();
 
 		// SONIC: PULGAR IZQUIERDO
 
