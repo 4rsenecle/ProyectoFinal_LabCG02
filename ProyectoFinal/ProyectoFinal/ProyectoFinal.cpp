@@ -107,10 +107,13 @@ GLfloat sonicVista = 0.0f;
 glm::vec3 sonicFrente;
 glm::vec3 sonicDerecha;
 GLfloat sonicSpeed = 0.0f; // mil pesos a que el profe no entiende la referencia
-GLfloat camaraAtras = 10.0f;
-GLfloat camaraArriba = 4.0f;
+GLfloat camaraAtras = 12.0f;
+GLfloat camaraArriba = 5.0f;
 glm::vec3 posicionCamara;
 GLfloat anguloSonic;
+GLfloat walkCycle;
+GLfloat dondeReset = 0.0f;
+GLfloat diferenciaCycle = 0.0f;
 
 // detección de llaves
 bool* keys;
@@ -118,8 +121,14 @@ bool* keys;
 // articulaciones de Sonic
 GLfloat leftShoulderArt = 0.0f;
 GLfloat leftArmArt = 0.0f;
+GLfloat leftLegMove = 0.0f;
+GLfloat leftKneeBend = 0.0f;
 GLfloat rightShoulderArt = 0.0f;
 GLfloat rightArmArt = 0.0f;
+GLfloat rightLegMove = 0.0f;
+GLfloat rightKneeBend = 0.0f;
+GLfloat chestMove = 0.0f;
+GLfloat headBob = 0.0f;
 static double limitFPS = 1.0 / 60.0;
 
 // Banderas de cámara
@@ -514,6 +523,7 @@ int main()
 		// TODO: Implementar movimiento del personaje.
 		if (mainWindow.getCamType() == 1) {
 			if (cam1 == 0) {
+				camera.setUp(glm::vec3(0.0f, 1.0f, 0.0f));
 				cam1 = 1;
 			}
 			xChange = mainWindow.getXChange();
@@ -526,11 +536,47 @@ int main()
 			sonicSpeed = 0.5f * deltaTime;
 
 			keys = mainWindow.getsKeys();
-			if (keys[GLFW_KEY_W]) posicionSonic += sonicFrente * sonicSpeed;
-			if (keys[GLFW_KEY_S]) posicionSonic -= sonicFrente * sonicSpeed;
-			if (keys[GLFW_KEY_A]) posicionSonic -= sonicDerecha * sonicSpeed;
-			if (keys[GLFW_KEY_D]) posicionSonic += sonicDerecha * sonicSpeed;
+			if (keys[GLFW_KEY_W] || keys[GLFW_KEY_S] || keys[GLFW_KEY_A] || keys[GLFW_KEY_D]) {
+				if (keys[GLFW_KEY_W]) posicionSonic += sonicFrente * sonicSpeed;
+				if (keys[GLFW_KEY_S]) posicionSonic -= sonicFrente * sonicSpeed;
+				if (keys[GLFW_KEY_A]) posicionSonic -= sonicDerecha * sonicSpeed;
+				if (keys[GLFW_KEY_D]) posicionSonic += sonicDerecha * sonicSpeed;
+				walkCycle += 0.01f;
+				printf("%f\n", walkCycle);
+				leftShoulderArt = sin(walkCycle) * 45;
+				leftArmArt = sin(walkCycle) * 90;
+				rightShoulderArt = -sin(walkCycle) * 45;
+				rightArmArt = -sin(walkCycle) * 90;
+				leftLegMove = sin(walkCycle) * 45;
+				leftKneeBend = sin(walkCycle) * 90;
+				rightLegMove = -sin(walkCycle) * 45;
+				rightKneeBend = -sin(walkCycle) * 90;
+				chestMove = sin(walkCycle) * 15;
+				headBob = -sin(walkCycle) * 30;
+			}
+			else {
+				dondeReset = round(walkCycle / (float)M_PI) * (float)M_PI;
+				diferenciaCycle = dondeReset - walkCycle;
 
+				if (fabs(diferenciaCycle) > 0.02f) {
+					walkCycle += (diferenciaCycle > 0 ? 1.0f : -1.0f) * 0.01f;
+					leftShoulderArt = sin(walkCycle) * 45.0f;
+					leftArmArt = sin(walkCycle) * 90.0f;
+					rightShoulderArt = -sin(walkCycle) * 45.0f;
+					rightArmArt = -sin(walkCycle) * 90.0f;
+					leftLegMove = sin(walkCycle) * 45;
+					leftKneeBend = sin(walkCycle) * 90;
+					rightLegMove = -sin(walkCycle) * 45;
+					rightKneeBend = -sin(walkCycle) * 90;
+					chestMove = sin(walkCycle) * 15;
+					headBob = -sin(walkCycle) * 30;
+				}
+				else {
+					walkCycle = dondeReset;
+					leftShoulderArt = leftArmArt = rightShoulderArt = rightArmArt = 0.0f;
+					leftLegMove = leftKneeBend = rightLegMove = rightKneeBend = 0.0f;
+				}
+			}
 			posicionCamara = posicionSonic - sonicFrente * camaraAtras + glm::vec3(0.0f, camaraArriba, 0.0f);
 			camera.setCameraPosition(posicionCamara);
 			camera.setFront(glm::normalize(posicionSonic - posicionCamara));
@@ -702,6 +748,7 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, posicionSonic);
 		model = glm::rotate(model, anguloSonic, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, chestMove * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		modelaux = model;
 		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -711,14 +758,15 @@ int main()
 
 		// SONIC: CABEZA
 		model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0f));
+		model = glm::rotate(model, headBob * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Sonic_Head.RenderModel();
 		model = modelaux;
 
 		// SONIC: CODO IZQUIERDO Y ARTICULACIÓN
 		model = glm::translate(model, glm::vec3(0.35f, 0.2f, 0.0f));
-		model = glm::rotate(model, -40.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::rotate(model, leftShoulderArt * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, -50.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, leftShoulderArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -726,7 +774,7 @@ int main()
 
 		// SONIC: BRAZO IZQUIERDO Y ARTICULACION
 		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-		model = glm::rotate(model, leftArmArt * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, leftArmArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SonicLeftArm.RenderModel();
 
@@ -738,45 +786,49 @@ int main()
 		// SONIC: RODILLA IZQUIERDA
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.32f, -0.3f, 0.0f));
+		model = glm::rotate(model, leftLegMove * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SonicLeftKnee.RenderModel();
 
 		// SONIC: PIERNA IZQUIERDA
 		model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f));
+		model = glm::rotate(model, leftKneeBend * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SonicLeftLeg.RenderModel();
 		
-
-		// SONIC: CODO DERECHO Y ARTICULACIÓN
 		model = modelaux;
 
-		model = glm::translate(model, glm::vec3(-0.5f, 0.1f, 0.0f));
-		model = glm::rotate(model, 40.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::rotate(model, rightShoulderArt * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		// SONIC: CODO DERECHA Y ARTICULACIÓN
+		model = glm::rotate(model, -180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(0.35f, 0.2f, 0.0f));
+		model = glm::rotate(model, 105.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, rightShoulderArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		SonicRightElbow.RenderModel();
+		SonicLeftElbow.RenderModel();
 
-		// SONIC: BRAZO DERECHO Y ARTICULACION
-		model = glm::translate(model, glm::vec3(-0.75f, 0.0f, 0.0f));
-		model = glm::rotate(model, rightArmArt * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		// SONIC: BRAZO DERECHA Y ARTICULACION
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		model = glm::rotate(model, rightArmArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		SonicRightArm.RenderModel();
+		SonicLeftArm.RenderModel();
 
 		// SONIC: MANO DERECHA
-		model = glm::translate(model, glm::vec3(-0.7f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(1.3f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		SonicRightHand.RenderModel();
+		SonicLeftHand.RenderModel();
 
 		// SONIC: RODILLA DERECHA
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-0.32f, -0.3f, 0.0f));
+		model = glm::rotate(model, rightLegMove * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SonicLeftKnee.RenderModel();
 
 		// SONIC: PIERNA DERECHA
 		model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f));
+		model = glm::rotate(model, rightKneeBend * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SonicLeftLeg.RenderModel();
 
