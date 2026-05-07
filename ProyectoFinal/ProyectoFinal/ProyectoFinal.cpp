@@ -543,16 +543,16 @@ int main()
 				if (keys[GLFW_KEY_D]) posicionSonic += sonicDerecha * sonicSpeed;
 				walkCycle += 0.01f;
 				printf("%f\n", walkCycle);
-				leftShoulderArt = sin(walkCycle) * 45;
-				leftArmArt = sin(walkCycle) * 90;
-				rightShoulderArt = -sin(walkCycle) * 45;
-				rightArmArt = -sin(walkCycle) * 90;
-				leftLegMove = sin(walkCycle) * 45;
-				leftKneeBend = sin(walkCycle) * 90;
-				rightLegMove = -sin(walkCycle) * 45;
-				rightKneeBend = -sin(walkCycle) * 90;
-				chestMove = sin(walkCycle) * 15;
-				headBob = -sin(walkCycle) * 30;
+				leftShoulderArt = sin(walkCycle) * 30.0f;
+				leftArmArt = sin(walkCycle) * 60.0f;
+				rightShoulderArt = -sin(walkCycle) * 30.0f;
+				rightArmArt = -sin(walkCycle) * 60.0f;
+				leftLegMove = sin(walkCycle) * 30.0f;
+				leftKneeBend = sin(walkCycle) * 60.0f;
+				rightLegMove = -sin(walkCycle) * 30.0f;
+				rightKneeBend = -sin(walkCycle) * 60.0f;
+				chestMove = sin(walkCycle) * 15.0f;
+				headBob = -sin(walkCycle) * 17.5f;
 			}
 			else {
 				dondeReset = round(walkCycle / (float)M_PI) * (float)M_PI;
@@ -560,16 +560,16 @@ int main()
 
 				if (fabs(diferenciaCycle) > 0.02f) {
 					walkCycle += (diferenciaCycle > 0 ? 1.0f : -1.0f) * 0.01f;
-					leftShoulderArt = sin(walkCycle) * 45.0f;
-					leftArmArt = sin(walkCycle) * 90.0f;
-					rightShoulderArt = -sin(walkCycle) * 45.0f;
-					rightArmArt = -sin(walkCycle) * 90.0f;
-					leftLegMove = sin(walkCycle) * 45;
-					leftKneeBend = sin(walkCycle) * 90;
-					rightLegMove = -sin(walkCycle) * 45;
-					rightKneeBend = -sin(walkCycle) * 90;
-					chestMove = sin(walkCycle) * 15;
-					headBob = -sin(walkCycle) * 30;
+					leftShoulderArt = sin(walkCycle) * 30.0f;
+					leftArmArt = sin(walkCycle) * 60.0f;
+					rightShoulderArt = -sin(walkCycle) * 30.0f;
+					rightArmArt = -sin(walkCycle) * 60.0f;
+					leftLegMove = sin(walkCycle) * 30.0f;
+					leftKneeBend = sin(walkCycle) * 60.0f;
+					rightLegMove = -sin(walkCycle) * 30.0f;
+					rightKneeBend = -sin(walkCycle) * 60.0f;
+					chestMove = sin(walkCycle) * 15.0f;
+					headBob = -sin(walkCycle) * 17.5f;
 				}
 				else {
 					walkCycle = dondeReset;
@@ -678,6 +678,8 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
+		color = glm::vec3(0.5f, 0.5f, 0.5f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
 		pisoTexture.UseTexture();
@@ -685,6 +687,7 @@ int main()
 
 		meshList[2]->RenderMesh();
 
+		
 
 		// SONIC
 		model = glm::mat4(1.0);
@@ -792,7 +795,6 @@ int main()
 		LampPostUpper.RenderModel();
 		model = modelaux;
 
-
 		if (mainWindow.getMoveLampPost() == 1) {
 			
 			spinTimer += 1.0f;
@@ -854,7 +856,7 @@ int main()
 			
 		}
 
-		// cambia la luz cada cierto tiempo
+		// cambia la luz cada 2 minutos
 		mainLight.setDirection(glm::vec3(moveDirectionalX,moveDirectionalY,0.0f));
 		if (dirTimer == 36000 && mainWindow.getDayNight() == 0) {
 			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
@@ -862,7 +864,7 @@ int main()
 			mainWindow.setDayNight(1);
 			dirTimer = 0;
 		}
-		else if (dirTimer == -36000 && mainWindow.getDayNight() == 1) {
+		else if (dirTimer == 360 && mainWindow.getDayNight() == 1) {
 			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
 			mainLight.changeLight(0.800f, 0.5f, 0.965f);
 			mainWindow.setDayNight(0);
