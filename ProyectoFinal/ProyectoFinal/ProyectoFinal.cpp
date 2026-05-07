@@ -68,6 +68,9 @@ Model Balloon_Gift;
 Model Balloon_Gift_Propeller1;
 Model Balloon_Gift_Propeller2;
 Model White_Rabbit;
+Model White_RabbitClock;
+Model White_RabbitRight;
+Model White_RabbitHead;
 
 
 Skybox skybox_day;
@@ -101,7 +104,7 @@ GLfloat sonicVista = 0.0f;
 glm::vec3 sonicFrente;
 glm::vec3 sonicDerecha;
 GLfloat sonicSpeed = 0.0f; // mil pesos a que el profe no entiende la referencia
-GLfloat camaraAtras = 12.0f;
+GLfloat camaraAtras = 30.0f;
 GLfloat camaraArriba = 5.0f;
 glm::vec3 posicionCamara;
 GLfloat anguloSonic;
@@ -124,6 +127,14 @@ GLfloat rightKneeBend = 0.0f;
 GLfloat chestMove = 0.0f;
 GLfloat headBob = 0.0f;
 static double limitFPS = 1.0 / 60.0;
+
+// WHITE RABBIT: Movimiento
+GLfloat whiteRabbitHeadBob = 0.0f;
+
+// BALLOON GIFT: Movimiento
+GLfloat lemniscateTimer = 0.0f;
+const GLfloat a = 3.0f;
+GLfloat lemniscate_X = 0.0f, lemniscate_Y = 0.0f;
 
 // Banderas de cámara
 GLint cam1 = 0;
@@ -347,7 +358,7 @@ int main()
 	dirtTexture.LoadTextureA();
 	plainTexture = Texture("Textures/plain.png");
 	plainTexture.LoadTextureA();
-	pisoTexture = Texture("Textures/piso.tga");
+	pisoTexture = Texture("Textures/tiledFloor.tga");
 	pisoTexture.LoadTextureA();
 	AgaveTexture = Texture("Textures/Agave.tga");
 	AgaveTexture.LoadTextureA();
@@ -396,7 +407,14 @@ int main()
 
 	// NPCs
 	White_Rabbit = Model();
-	White_Rabbit.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbit.obj");
+	White_Rabbit.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitBody.obj");
+	White_RabbitHead = Model();
+	White_RabbitHead.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitHead.obj");
+	White_RabbitClock = Model();
+	White_RabbitClock.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitClockArm.obj");
+	White_RabbitRight = Model();
+	White_RabbitRight.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitRightArm.obj");
+
 
 
 	std::vector<std::string> skyboxFacesDay, skyboxFacesNight;
@@ -778,17 +796,38 @@ int main()
 
 		// Balloon Gift
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(40.5f, -0.75f, 26.0f));
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		model = glm::translate(model, glm::vec3(40.5f + lemniscate_X, 15.0f + lemniscate_Y, 26.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Balloon_Gift.RenderModel();
 
 		// White Rabbit
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-40.5f, -0.75f, -26.0f));
+		model = glm::translate(model, glm::vec3(-40.5f, 3.0f, -26.0f));
 		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		White_Rabbit.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 29.0f, 0.0f));
+		model = glm::rotate(model, sin(whiteRabbitHeadBob * 0.05f) * toRadians * 20, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		White_RabbitHead.RenderModel();
+
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-8.7f,15.0f, -5.0f));
+		model = glm::rotate(model, 60.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, 20.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		White_RabbitRight.RenderModel();
+
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(8.7f, 16.0f, -5.0f));
+		model = glm::rotate(model, -60.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, -sin(whiteRabbitHeadBob * 0.05f) * toRadians * 30, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -60.0f * toRadians, glm::vec3(1.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		White_RabbitClock.RenderModel();
 
 		if (mainWindow.getMoveLampPost() == 1) {
 			
@@ -876,6 +915,14 @@ int main()
 		moveDirectionalX = cos(0.0001f*dirTimer);
 		moveDirectionalY = -sin(0.0001f* dirTimer);
 
+		// contadores
+		// White Rabbit
+		whiteRabbitHeadBob += 0.1f;
+
+		// Balloon Gift
+		lemniscateTimer += 0.003f;
+		lemniscate_X = ((a*sqrt(2)*cos(lemniscateTimer))/1+pow(sin(lemniscateTimer), 2));
+		lemniscate_Y = ((a * sqrt(2) * cos(lemniscateTimer)*sin(lemniscateTimer)) / 1 + pow(sin(lemniscateTimer), 2));
 
 		glUseProgram(0);
 
