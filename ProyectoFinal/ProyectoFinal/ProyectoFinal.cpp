@@ -56,24 +56,18 @@ Model Sonic_Body;
 Model SonicRightArm;
 Model SonicRightElbow;
 Model SonicRightHand;
-Model SonicRightThumb;
-Model SonicRightIndex;
-Model SonicRightMiddle;
-Model SonicRightRing;
-Model SonicRightPinky;
 Model SonicRightKnee;
 Model SonicRightLeg;
 Model SonicLeftArm;
 Model SonicLeftElbow;
 Model SonicLeftHand;
-Model SonicLeftThumb;
-Model SonicLeftIndex;
-Model SonicLeftMiddle;
-Model SonicLeftRing;
-Model SonicLeftPinky;
 Model SonicLeftKnee;
 Model SonicLeftLeg;
 Model LampPostUpper, LampPostLower;
+Model Balloon_Gift;
+Model Balloon_Gift_Propeller1;
+Model Balloon_Gift_Propeller2;
+Model White_Rabbit;
 
 
 Skybox skybox_day;
@@ -376,16 +370,6 @@ int main()
 	SonicRightElbow.LoadModel("Models/rewrite-sonic/source/SonicRightElbow.obj");
 	SonicRightHand = Model();
 	SonicRightHand.LoadModel("Models/rewrite-sonic/source/SonicRightHand.obj");
-	SonicRightThumb = Model();
-	SonicRightThumb.LoadModel("Models/rewrite-sonic/source/SonicRightThumb.obj");
-	SonicRightIndex = Model();
-	SonicRightIndex.LoadModel("Models/rewrite-sonic/source/SonicRightIndex.obj");
-	SonicRightMiddle = Model();
-	SonicRightMiddle.LoadModel("Models/rewrite-sonic/source/SonicRightMiddle.obj");
-	SonicRightRing = Model();
-	SonicRightRing.LoadModel("Models/rewrite-sonic/source/SonicRightRing.obj");
-	SonicRightPinky = Model();
-	SonicRightPinky.LoadModel("Models/rewrite-sonic/source/SonicRightPinky.obj");
 	SonicRightKnee = Model();
 	SonicRightKnee.LoadModel("Models/rewrite-sonic/source/SonicRightKnee.obj");
 	SonicRightLeg = Model();
@@ -396,26 +380,23 @@ int main()
 	SonicLeftElbow.LoadModel("Models/rewrite-sonic/source/SonicLeftElbow.obj");
 	SonicLeftHand = Model();
 	SonicLeftHand.LoadModel("Models/rewrite-sonic/source/SonicLeftHand.obj");
-	SonicLeftThumb = Model();
-	SonicLeftThumb.LoadModel("Models/rewrite-sonic/source/SonicLeftThumb.obj");
-	SonicLeftIndex = Model();
-	SonicLeftIndex.LoadModel("Models/rewrite-sonic/source/SonicLeftIndex.obj");
-	SonicLeftMiddle = Model();
-	SonicLeftMiddle.LoadModel("Models/rewrite-sonic/source/SonicLeftMiddle.obj");
-	SonicLeftRing = Model();
-	SonicLeftRing.LoadModel("Models/rewrite-sonic/source/SonicLeftRing.obj");
-	SonicLeftPinky = Model();
-	SonicLeftPinky.LoadModel("Models/rewrite-sonic/source/SonicLeftPinky.obj");
 	SonicLeftKnee = Model();
 	SonicLeftKnee.LoadModel("Models/rewrite-sonic/source/SonicLeftKnee.obj");
 	SonicLeftLeg = Model();
 	SonicLeftLeg.LoadModel("Models/rewrite-sonic/source/SonicLeftLeg.obj");
+	
 
 	// MODELOS: Elementos 
 	LampPostLower = Model();
 	LampPostLower.LoadModel("Models/LampPostBody.obj");
 	LampPostUpper = Model();
 	LampPostUpper.LoadModel("Models/LampPostPole.obj");
+	Balloon_Gift = Model();
+	Balloon_Gift.LoadModel("Models/peachy-balloon-gift/source/BalloonGift.obj");
+
+	// NPCs
+	White_Rabbit = Model();
+	White_Rabbit.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbit.obj");
 
 
 	std::vector<std::string> skyboxFacesDay, skyboxFacesNight;
@@ -794,6 +775,20 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		LampPostUpper.RenderModel();
 		model = modelaux;
+
+		// Balloon Gift
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(40.5f, -0.75f, 26.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Balloon_Gift.RenderModel();
+
+		// White Rabbit
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-40.5f, -0.75f, -26.0f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		White_Rabbit.RenderModel();
 
 		if (mainWindow.getMoveLampPost() == 1) {
 			
