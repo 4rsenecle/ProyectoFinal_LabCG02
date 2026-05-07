@@ -100,6 +100,21 @@ GLfloat dirTimer = 0.0f;
 GLfloat moveDirectionalX = 0.0f;
 GLfloat moveDirectionalY = 0.0f;
 
+// movimiento de la cámara con Sonic
+glm::vec3 posicionSonic = glm::vec3(30.0f, 3.0f, 15.0f);
+GLfloat xChange = 0.0f;
+GLfloat sonicVista = 0.0f;
+glm::vec3 sonicFrente;
+glm::vec3 sonicDerecha;
+GLfloat sonicSpeed = 0.0f; // mil pesos a que el profe no entiende la referencia
+GLfloat camaraAtras = 10.0f;
+GLfloat camaraArriba = 4.0f;
+glm::vec3 posicionCamara;
+GLfloat anguloSonic;
+
+// detección de llaves
+bool* keys;
+
 // articulaciones de Sonic
 GLfloat leftShoulderArt = 0.0f;
 GLfloat leftArmArt = 0.0f;
@@ -499,12 +514,28 @@ int main()
 		// TODO: Implementar movimiento del personaje.
 		if (mainWindow.getCamType() == 1) {
 			if (cam1 == 0) {
-				camera.setCameraPosition(glm::vec3(0.0f, 3.0f, 0.0f));
-				camera.setFront(glm::vec3(0.0f, 0.0f, 1.0f));
 				cam1 = 1;
 			}
-			camera.mouseControlLocked(mainWindow.getXChange());
-			camera.keyControl(mainWindow.getsKeys(), deltaTime);
+			xChange = mainWindow.getXChange();
+			sonicVista += xChange * 0.5f;
+			sonicFrente = glm::vec3(cos(sonicVista * toRadians), 0.0f, sin(sonicVista * toRadians));
+			sonicFrente = glm::normalize(sonicFrente);
+
+			sonicDerecha = glm::normalize(glm::cross(sonicFrente, glm::vec3(0.0f, 1.0f, 0.0f)));
+
+			sonicSpeed = 0.5f * deltaTime;
+
+			keys = mainWindow.getsKeys();
+			if (keys[GLFW_KEY_W]) posicionSonic += sonicFrente * sonicSpeed;
+			if (keys[GLFW_KEY_S]) posicionSonic -= sonicFrente * sonicSpeed;
+			if (keys[GLFW_KEY_A]) posicionSonic -= sonicDerecha * sonicSpeed;
+			if (keys[GLFW_KEY_D]) posicionSonic += sonicDerecha * sonicSpeed;
+
+			posicionCamara = posicionSonic - sonicFrente * camaraAtras + glm::vec3(0.0f, camaraArriba, 0.0f);
+			camera.setCameraPosition(posicionCamara);
+			camera.setFront(glm::normalize(posicionSonic - posicionCamara));
+
+			anguloSonic = atan2(sonicFrente.x, sonicFrente.z);
 			cam2 = 0;
 			cam3 = 0;
 			camDebug = 0;
@@ -542,7 +573,6 @@ int main()
 		// Cámara de debug, las demás cámaras son fáciles pues solo es un set. 
 		else if (mainWindow.getCamType() == 0) {
 			if (camDebug == 0) {
-				camera.setCameraPosition(glm::vec3(0.0f, 3.0f, 0.0f));
 				camDebug = 1;
 			}
 			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
@@ -670,7 +700,8 @@ int main()
 
 		// SONIC
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(30.0f, 3.0f, 15.0f));
+		model = glm::translate(model, posicionSonic);
+		model = glm::rotate(model, anguloSonic, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		modelaux = model;
 		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -719,7 +750,7 @@ int main()
 		// SONIC: CODO DERECHO Y ARTICULACIÓN
 		model = modelaux;
 
-		model = glm::translate(model, glm::vec3(-0.4f, 0.1f, 0.0f));
+		model = glm::translate(model, glm::vec3(-0.5f, 0.1f, 0.0f));
 		model = glm::rotate(model, 40.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, rightShoulderArt * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 
@@ -866,6 +897,7 @@ int main()
 		}
 		moveDirectionalX = cos(0.0001f*dirTimer);
 		moveDirectionalY = -sin(0.0001f* dirTimer);
+
 
 		glUseProgram(0);
 
