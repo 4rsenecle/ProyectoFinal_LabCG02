@@ -72,6 +72,13 @@ Model White_RabbitClock;
 Model White_RabbitRight;
 Model White_RabbitHead;
 
+Model CheshireCat_Body;
+Model CheshireCat_Tail;
+Model CheshireCat_Head;
+Model CheshireCat_Right_Arm;
+Model CheshireCat_Right_Leg;
+Model CheshireCat_Left_Arm;
+Model CheshireCat_Left_Leg;
 
 Skybox skybox_day;
 Skybox skybox_night;
@@ -414,6 +421,20 @@ int main()
 	White_RabbitClock.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitClockArm.obj");
 	White_RabbitRight = Model();
 	White_RabbitRight.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitRightArm.obj");
+	CheshireCat_Body = Model();
+	CheshireCat_Body.LoadModel("Models/cheshire-cat/body.obj");
+	CheshireCat_Head = Model();
+	CheshireCat_Head.LoadModel("Models/cheshire-cat/head.obj");
+	CheshireCat_Tail = Model();
+	CheshireCat_Tail.LoadModel("Models/cheshire-cat/tail.obj");
+	CheshireCat_Left_Arm = Model();
+	CheshireCat_Left_Arm.LoadModel("Models/cheshire-cat/left_arm.obj");
+	CheshireCat_Right_Arm = Model();
+	CheshireCat_Right_Arm.LoadModel("Models/cheshire-cat/right_arm.obj");
+	CheshireCat_Left_Leg = Model();
+	CheshireCat_Left_Leg.LoadModel("Models/cheshire-cat/left_leg.obj");
+	CheshireCat_Right_Leg = Model();
+	CheshireCat_Right_Leg.LoadModel("Models/cheshire-cat/right_leg.obj");
 
 
 
@@ -828,6 +849,45 @@ int main()
 		model = glm::rotate(model, -60.0f * toRadians, glm::vec3(1.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		White_RabbitClock.RenderModel();
+
+		//Cheshire Cat
+		//body
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(10.0f, 5.0f, -10.0f));
+		model = glm::scale(model, glm::vec3(6.0f,6.0f,6.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Body.RenderModel();
+		//head
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f,0.325f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Head.RenderModel();
+		//tail
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f,-0.225f,-0.225f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Tail.RenderModel();
+		//left_arm
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.2f,0.24f,-0.05f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Left_Arm.RenderModel();
+		//right_arm
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.2f,0.24f,-0.05f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Right_Arm.RenderModel();
+		//left_leg
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.15f,-0.28f,-0.025f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Left_Leg.RenderModel();
+		//right_leg
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.15f,-0.28f,-0.025f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Right_Leg.RenderModel();
 
 		if (mainWindow.getMoveLampPost() == 1) {
 			
