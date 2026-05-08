@@ -63,6 +63,7 @@ Model SonicLeftElbow;
 Model SonicLeftHand;
 Model SonicLeftKnee;
 Model SonicLeftLeg;
+
 Model LampPostUpper, LampPostLower;
 Model Balloon_Gift;
 Model Balloon_Gift_Propeller1;
@@ -71,6 +72,18 @@ Model White_Rabbit;
 Model White_RabbitClock;
 Model White_RabbitRight;
 Model White_RabbitHead;
+Model SteamPunkBooth;
+Model SteamPunkClock;
+Model SteamPunkHammer;
+Model SteamPunkChair;
+
+Model ChaosEmeraldG;
+Model ChaosEmeraldR;
+Model ChaosEmeraldM;
+Model ChaosEmeraldB;
+Model ChaosEmeraldGrey;
+Model ChaosEmeraldY;
+Model ChaosEmeraldC;
 
 
 Skybox skybox_day;
@@ -135,6 +148,9 @@ GLfloat whiteRabbitHeadBob = 0.0f;
 GLfloat lemniscateTimer = 0.0f;
 const GLfloat a = 3.0f;
 GLfloat lemniscate_X = 0.0f, lemniscate_Y = 0.0f;
+
+// Chaos Emeralds
+GLfloat chaosEmeraldsComplex;
 
 // Banderas de cámara
 GLint cam1 = 0;
@@ -404,6 +420,29 @@ int main()
 	LampPostUpper.LoadModel("Models/LampPostPole.obj");
 	Balloon_Gift = Model();
 	Balloon_Gift.LoadModel("Models/peachy-balloon-gift/source/BalloonGift.obj");
+	SteamPunkBooth = Model();
+	SteamPunkBooth.LoadModel("Models/SteamPunkBooth.obj");
+	SteamPunkClock = Model();
+	SteamPunkClock.LoadModel("Models/SteamPunkClock.obj");
+	SteamPunkHammer = Model();
+	SteamPunkHammer.LoadModel("Models/SteamPunkHammer.obj");
+	SteamPunkChair = Model();
+	SteamPunkChair.LoadModel("Models/SteamPunkChair.obj");
+	ChaosEmeraldG = Model();
+	ChaosEmeraldG.LoadModel("Models/source/GreenChaosEmerald.obj");
+	ChaosEmeraldY = Model();
+	ChaosEmeraldY.LoadModel("Models/source/YellowChaosEmerald.obj");
+	ChaosEmeraldGrey = Model();
+	ChaosEmeraldGrey.LoadModel("Models/source/GreyChaosEmerald.obj");
+	ChaosEmeraldR = Model();
+	ChaosEmeraldR.LoadModel("Models/source/RedChaosEmerald.obj");
+	ChaosEmeraldB = Model();
+	ChaosEmeraldB.LoadModel("Models/source/BlueChaosEmerald.obj");
+	ChaosEmeraldM = Model();
+	ChaosEmeraldM.LoadModel("Models/source/MagentaChaosEmerald.obj");
+	ChaosEmeraldC = Model();
+	ChaosEmeraldC.LoadModel("Models/source/CyanChaosEmerald.obj");
+	
 
 	// NPCs
 	White_Rabbit = Model();
@@ -415,7 +454,7 @@ int main()
 	White_RabbitRight = Model();
 	White_RabbitRight.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitRightArm.obj");
 
-
+	
 
 	std::vector<std::string> skyboxFacesDay, skyboxFacesNight;
 	
@@ -626,7 +665,7 @@ int main()
 			cam2 = 0;
 			cam3 = 0;
 		}
-		
+
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -634,13 +673,14 @@ int main()
 		if (mainWindow.getDayNight() == 0) {
 			skybox_day.DrawSkybox(camera.calculateViewMatrix(), projection);
 			mainLight.changeLight(1.0f, 0.875f, 0.8f);
-		}else 
+		}
+		else
 		{
 			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
 			mainLight.changeLight(0.800f, 0.5f, 0.965f);
 		}
 
-		
+
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
@@ -686,7 +726,7 @@ int main()
 
 		meshList[2]->RenderMesh();
 
-		
+
 
 		// SONIC
 		model = glm::mat4(1.0);
@@ -739,7 +779,7 @@ int main()
 		model = glm::rotate(model, leftKneeBend * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SonicLeftLeg.RenderModel();
-		
+
 		model = modelaux;
 
 		// SONIC: CODO DERECHA Y ARTICULACIÓN
@@ -776,6 +816,48 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SonicLeftLeg.RenderModel();
 
+		// Chaos Emeralds
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex) - 5 * sin((2 * chaosEmeraldsComplex) / 3), -60.0f + +2 * cos(chaosEmeraldsComplex) + 5 * cos((2 * chaosEmeraldsComplex) / 3)));
+		model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ChaosEmeraldG.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex - 1.0f) - 5 * sin((2 * chaosEmeraldsComplex - 1.0f) / 3), -60.0f + 2 * cos(chaosEmeraldsComplex - 1.0f) + 5 * cos((2 * chaosEmeraldsComplex - 1.0f) / 3)));
+		model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ChaosEmeraldB.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex - 2.0f) - 5 * sin((2 * chaosEmeraldsComplex - 2.0f) / 3), -60.0f + 2 * cos(chaosEmeraldsComplex - 2.0f) + 5 * cos((2 * chaosEmeraldsComplex - 2.0f) / 3)));
+		model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ChaosEmeraldR.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex - 3.0f) - 5 * sin((2 * chaosEmeraldsComplex - 3.0f) / 3), -60.0f + 2 * cos(chaosEmeraldsComplex - 3.0f) + 5 * cos((2 * chaosEmeraldsComplex - 3.0f) / 3)));
+		model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ChaosEmeraldC.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex - 4.0f) - 5 * sin((2 * chaosEmeraldsComplex - 4.0f) / 3), -60.0f + 2 * cos(chaosEmeraldsComplex - 4.0f) + 5 * cos((2 * chaosEmeraldsComplex - 4.0f) / 3)));
+		model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ChaosEmeraldY.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex - 5.0f) - 5 * sin((2 * chaosEmeraldsComplex - 5.0f) / 3), -60.0f + 2 * cos(chaosEmeraldsComplex - 5.0f) + 5 * cos((2 * chaosEmeraldsComplex - 5.0f) / 3)));
+		model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ChaosEmeraldGrey.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex - 6.0f) - 5 * sin((2 * chaosEmeraldsComplex - 6.0f) / 3), -60.0f + 2 * cos(chaosEmeraldsComplex - 6.0f) + 5 * cos((2 * chaosEmeraldsComplex - 6.0f) / 3)));
+		model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ChaosEmeraldM.RenderModel();
 
 		// programación del faro
 		model = glm::mat4(1.0);
@@ -815,7 +897,7 @@ int main()
 		White_RabbitHead.RenderModel();
 
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(-8.7f,15.0f, -5.0f));
+		model = glm::translate(model, glm::vec3(-8.7f, 15.0f, -5.0f));
 		model = glm::rotate(model, 60.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, 20.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -829,8 +911,42 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		White_RabbitClock.RenderModel();
 
+		// Martillo Steampunk
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 0.6f, 120.0f));
+		model = glm::rotate(model, -85.0f * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkHammer.RenderModel();
+
+		// Cabina Steampunk
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(20.0f, 13.0f, -80.0f));
+		model = glm::scale(model, glm::vec3(7.5f, 7.5f, 7.5f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkBooth.RenderModel();
+
+		// Reloj Steampunk
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(100.0f, 13.0f, 30.0f));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkClock.RenderModel();
+
+		// Silla Steampunk
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(30.0f, 3.5f, 45.0f));
+		model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkChair.RenderModel();
+
 		if (mainWindow.getMoveLampPost() == 1) {
-			
+
 			spinTimer += 1.0f;
 
 			if (spinTimer < 360) {
@@ -866,10 +982,10 @@ int main()
 				spinLightX = 1.75f * -sin(1 * postSpin * toRadians);
 				spinLightY = 1.75f * cos(1 * postSpin * toRadians) - 1.75f;
 				pointLights[1].updatePosition(glm::vec3(90.0f + spinLightX, 8.0f + spinLightY, -70.0f));
-				
-				
+
+
 			}
-			
+
 
 			/*
 			// Bloque para hacer debugging
@@ -879,7 +995,7 @@ int main()
 			spinLightY = 1.75f * cos(1 * spinTimer * toRadians) - 1.75f;
 			pointLights[1].updatePosition(glm::vec3(20.5f + spinLightX, 8.0f + spinLightY, 7.0f));
 			*/
-			
+
 			if (spinTimer == 1440) {
 				mainWindow.setMoveLampPost(0);
 				spinTimer = 0;
@@ -887,11 +1003,11 @@ int main()
 				postSpin = 0;
 				postScaleX = postScaleY = postScaleZ = 0;
 			}
-			
+
 		}
 
 		// cambia la luz cada 2 minutos
-		mainLight.setDirection(glm::vec3(moveDirectionalX,moveDirectionalY,0.0f));
+		mainLight.setDirection(glm::vec3(moveDirectionalX, moveDirectionalY, 0.0f));
 		if (dirTimer == 36000 && mainWindow.getDayNight() == 0) {
 			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
 			mainLight.changeLight(1.0f, 0.875f, 0.8f);
@@ -912,12 +1028,13 @@ int main()
 		else {
 			dirTimer -= 1.0f;
 		}
-		moveDirectionalX = cos(0.0001f*dirTimer);
-		moveDirectionalY = -sin(0.0001f* dirTimer);
+		moveDirectionalX = cos(0.0001f * dirTimer);
+		moveDirectionalY = -sin(0.0001f * dirTimer);
 
 		// contadores
 		// White Rabbit
 		whiteRabbitHeadBob += 0.1f;
+		chaosEmeraldsComplex += 0.01f;
 
 		// Balloon Gift
 		lemniscateTimer += 0.003f;
