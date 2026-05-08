@@ -72,6 +72,24 @@ Model White_RabbitClock;
 Model White_RabbitRight;
 Model White_RabbitHead;
 
+Model Emil_Body;
+Model Emil_Head;
+Model Emil_Coat0;
+Model Emil_Coat1;
+Model Emil_Weapon;
+Model Emil_Left_Leg0;
+Model Emil_Left_Leg1;
+Model Emil_Right_Leg0;
+Model Emil_Right_Leg1;
+Model Emil_Left_Arm0;
+Model Emil_Left_Arm1;
+Model Emil_Right_Arm0;
+Model Emil_Right_Arm1;
+Model Emil_Left_Hand;
+Model Emil_Right_Hand;
+Model Emil_Left_Foot;
+Model Emil_Right_Foot;
+
 Model CheshireCat_Body;
 Model CheshireCat_Tail;
 Model CheshireCat_Head;
@@ -402,7 +420,41 @@ int main()
 	SonicLeftKnee.LoadModel("Models/rewrite-sonic/source/SonicLeftKnee.obj");
 	SonicLeftLeg = Model();
 	SonicLeftLeg.LoadModel("Models/rewrite-sonic/source/SonicLeftLeg.obj");
-	
+	// MODELO: Emil
+	Emil_Body = Model();
+	Emil_Body.LoadModel("Models/emil/body.obj");
+	Emil_Coat0 = Model();
+	Emil_Coat0.LoadModel("Models/emil/coat_0.obj");
+	Emil_Coat1 = Model();
+	Emil_Coat1.LoadModel("Models/emil/coat_1.obj");
+	Emil_Head = Model();
+	Emil_Head.LoadModel("Models/emil/head.obj");
+	Emil_Left_Arm0 = Model();
+	Emil_Left_Arm0.LoadModel("Models/emil/left_arm_0.obj");
+	Emil_Left_Arm1 = Model();
+	Emil_Left_Arm1.LoadModel("Models/emil/left_arm_1.obj");
+	Emil_Left_Foot = Model();
+	Emil_Left_Foot.LoadModel("Models/emil/left_foot.obj");
+	Emil_Left_Hand = Model();
+	Emil_Left_Hand.LoadModel("Models/emil/left_hand.obj");
+	Emil_Left_Leg0 = Model();
+	Emil_Left_Leg0.LoadModel("Models/emil/left_leg_0.obj");
+	Emil_Left_Leg1 = Model();
+	Emil_Left_Leg1.LoadModel("Models/emil/left_leg_1.obj");
+	Emil_Right_Arm0 = Model();
+	Emil_Right_Arm0.LoadModel("Models/emil/right_arm_0.obj");
+	Emil_Right_Arm1 = Model();
+	Emil_Right_Arm1.LoadModel("Models/emil/right_arm_1.obj");
+	Emil_Right_Foot = Model();
+	Emil_Right_Foot.LoadModel("Models/emil/right_foot.obj");
+	Emil_Right_Hand = Model();
+	Emil_Right_Hand.LoadModel("Models/emil/right_hand.obj");
+	Emil_Right_Leg0 = Model();
+	Emil_Right_Leg0.LoadModel("Models/emil/right_leg_0.obj");
+	Emil_Right_Leg1 = Model();
+	Emil_Right_Leg1.LoadModel("Models/emil/right_leg_1.obj");
+	Emil_Weapon = Model();
+	Emil_Weapon.LoadModel("Models/emil/weapon.obj");
 
 	// MODELOS: Elementos 
 	LampPostLower = Model();
@@ -796,6 +848,88 @@ int main()
 		model = glm::rotate(model, rightKneeBend * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SonicLeftLeg.RenderModel();
+
+		// EMIL
+		//body
+		model = glm::mat4(1.0);
+		model = glm::translate(model,glm::vec3(-10.0f,14.0f,10.0f));
+		model = glm::scale(model, glm::vec3(10.0f,10.0f,10.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Body.RenderModel();
+		//head
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f,0.29f,0.08f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Head.RenderModel();
+		//coat 0
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f,0.32f-0.1f,0.05f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Coat0.RenderModel();
+		//coat 1
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Coat1.RenderModel();
+		//left_arm
+		//arm 0
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.1f,0.15f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Left_Arm0.RenderModel();
+		//arm 1
+		model = glm::translate(model, glm::vec3(0.25f,0.0f,0.03f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Left_Arm1.RenderModel();
+		//hand
+		model = glm::translate(model, glm::vec3(0.23f,0.0f,-0.025f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Left_Hand.RenderModel();
+		//right_arm
+		//arm 0
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.1f,0.15f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Right_Arm0.RenderModel();
+		//arm 1
+		model = glm::translate(model, glm::vec3(-0.25f,0.0f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Right_Arm1.RenderModel();
+		//hand
+		model = glm::translate(model, glm::vec3(-0.23f,0.0f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Right_Hand.RenderModel();
+		//weapon
+		model = glm::translate(model, glm::vec3(-0.1f,-0.02f,0.0));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Weapon.RenderModel();
+		//left_leg
+		//leg 0
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.08f,-0.21f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Left_Leg0.RenderModel();
+		//leg 1
+		model = glm::translate(model, glm::vec3(0.01f,-0.34f,0.01f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Left_Leg1.RenderModel();
+		//foot
+		model = glm::translate(model, glm::vec3(-0.01f,-0.33f,-0.01f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Left_Foot.RenderModel();
+		//right_leg
+		//leg 0
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.08f,-0.21f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Right_Leg0.RenderModel();
+		//leg 1
+		model = glm::translate(model, glm::vec3(-0.01f,-0.34f,0.01f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Right_Leg1.RenderModel();
+		//foot
+		model = glm::translate(model, glm::vec3(0.01f,-0.33f,-0.01f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Right_Foot.RenderModel();
 
 
 		// programaci�n del faro
