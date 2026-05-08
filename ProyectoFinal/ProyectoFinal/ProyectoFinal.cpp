@@ -149,8 +149,13 @@ GLfloat lemniscateTimer = 0.0f;
 const GLfloat a = 3.0f;
 GLfloat lemniscate_X = 0.0f, lemniscate_Y = 0.0f;
 
+// Steampunk Clock
+GLfloat SteamPunkClockFloat = 0.0f;
+
 // Chaos Emeralds
 GLfloat chaosEmeraldsComplex;
+
+
 
 // Banderas de cámara
 GLint cam1 = 0;
@@ -930,7 +935,8 @@ int main()
 
 		// Reloj Steampunk
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(100.0f, 13.0f, 30.0f));
+		model = glm::translate(model, glm::vec3(100.0f, 9.0f + sin(SteamPunkClockFloat * 3.0f), 30.0f));
+		model = glm::rotate(model, SteamPunkClockFloat * 100.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1006,40 +1012,41 @@ int main()
 
 		}
 
-		// cambia la luz cada 2 minutos
+		// cambia la luz cada cierto tiempo
 		mainLight.setDirection(glm::vec3(moveDirectionalX, moveDirectionalY, 0.0f));
-		if (dirTimer == 36000 && mainWindow.getDayNight() == 0) {
+		if (dirTimer >= 31000 && mainWindow.getDayNight() == 0) {
 			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
 			mainLight.changeLight(1.0f, 0.875f, 0.8f);
 			mainWindow.setDayNight(1);
-			dirTimer = 0;
+			dirTimer = 0.0f;
 		}
-		else if (dirTimer == 360 && mainWindow.getDayNight() == 1) {
+		else if (dirTimer >= 31000 && mainWindow.getDayNight() == 1) {
 			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
 			mainLight.changeLight(0.800f, 0.5f, 0.965f);
 			mainWindow.setDayNight(0);
-			dirTimer = 0;
+			dirTimer = 0.0f;
 		}
 
-		// define hacia dónde se mueve la luz dependiendo de si es de noche o de día
-		if (mainWindow.getDayNight() == 0) {
-			dirTimer += 1.0f;
-		}
-		else {
-			dirTimer -= 1.0f;
-		}
+		// define la dirección de la luz
+		dirTimer += 1.5f;
 		moveDirectionalX = cos(0.0001f * dirTimer);
-		moveDirectionalY = -sin(0.0001f * dirTimer);
+		moveDirectionalY = -abs(sin(0.0001f * dirTimer));
 
 		// contadores
 		// White Rabbit
 		whiteRabbitHeadBob += 0.1f;
+
+		// Chaos Emeralds
 		chaosEmeraldsComplex += 0.01f;
+
+		// Reloj Steampunk
+		SteamPunkClockFloat += 0.001f;
 
 		// Balloon Gift
 		lemniscateTimer += 0.003f;
 		lemniscate_X = ((a*sqrt(2)*cos(lemniscateTimer))/1+pow(sin(lemniscateTimer), 2));
 		lemniscate_Y = ((a * sqrt(2) * cos(lemniscateTimer)*sin(lemniscateTimer)) / 1 + pow(sin(lemniscateTimer), 2));
+
 
 		glUseProgram(0);
 
