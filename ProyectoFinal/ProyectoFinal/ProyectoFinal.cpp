@@ -98,7 +98,7 @@ GLfloat moveDirectionalX = 0.0f;
 GLfloat moveDirectionalY = 0.0f;
 
 // movimiento de la cámara con Sonic
-glm::vec3 posicionSonic = glm::vec3(30.0f, 3.0f, 15.0f);
+glm::vec3 posicionSonic = glm::vec3(70.0f, 3.0f, -65.0f);
 GLfloat xChange = 0.0f;
 GLfloat sonicVista = 0.0f;
 glm::vec3 sonicFrente;
@@ -474,7 +474,7 @@ int main()
 	// luz de la lampara
 	pointLights[1] = PointLight(0.75f, 0.8f, 1.0f,
 		5.0f, 0.1f,
-		20.5f, 8.0f, 7.0f,
+		90.0f, 8.0f, -70.0f,
 		1.0f, 0.3f, 0.02f
 	);
 	pointLightCount++;
@@ -676,7 +676,7 @@ int main()
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
+		model = glm::scale(model, glm::vec3(15.0f, 1.0f, 15.0f));
 		color = glm::vec3(0.5f, 0.5f, 0.5f);
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -779,7 +779,7 @@ int main()
 
 		// programación del faro
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(20.5f, -0.75f, 7.0f));
+		model = glm::translate(model, glm::vec3(90.0f, -0.75f, -70.0f));
 		model = glm::scale(model, glm::vec3(0.5f + postScaleX, 0.5f + postScaleY, 0.5f + postScaleZ));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		LampPostLower.RenderModel();
@@ -796,14 +796,14 @@ int main()
 
 		// Balloon Gift
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(40.5f + lemniscate_X, 15.0f + lemniscate_Y, 26.0f));
+		model = glm::translate(model, glm::vec3(90.5f + lemniscate_X, 15.0f + lemniscate_Y, -90.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Balloon_Gift.RenderModel();
 
 		// White Rabbit
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-40.5f, 3.0f, -26.0f));
+		model = glm::translate(model, glm::vec3(130.5f, 3.0f, -85.0f));
 		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -865,7 +865,7 @@ int main()
 				postSpin += 2.0f;
 				spinLightX = 1.75f * -sin(1 * postSpin * toRadians);
 				spinLightY = 1.75f * cos(1 * postSpin * toRadians) - 1.75f;
-				pointLights[1].updatePosition(glm::vec3(20.5f + spinLightX, 8.0f + spinLightY, 7.0f));
+				pointLights[1].updatePosition(glm::vec3(90.0f + spinLightX, 8.0f + spinLightY, -70.0f));
 				
 				
 			}
@@ -883,7 +883,7 @@ int main()
 			if (spinTimer == 1440) {
 				mainWindow.setMoveLampPost(0);
 				spinTimer = 0;
-				pointLights[1].updatePosition(glm::vec3(20.5f, 8.0f, 7.0f));
+				pointLights[1].updatePosition(glm::vec3(90.0f, 8.0f, -70.0f));
 				postSpin = 0;
 				postScaleX = postScaleY = postScaleZ = 0;
 			}
