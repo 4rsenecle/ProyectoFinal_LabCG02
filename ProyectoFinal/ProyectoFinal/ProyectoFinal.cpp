@@ -1,5 +1,5 @@
 /*
-Práctica 7: Iluminación 1 
+Prï¿½ctica 7: Iluminaciï¿½n 1 
 */
 //para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
@@ -10,12 +10,12 @@ Práctica 7: Iluminación 1
 #include <vector>
 #include <math.h>
 
-#include <glew.h>
-#include <glfw3.h>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-#include <glm.hpp>
-#include <gtc\matrix_transform.hpp>
-#include <gtc\type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 //para probar el importer
 //#include<assimp/Importer.hpp>
 
@@ -25,10 +25,10 @@ Práctica 7: Iluminación 1
 #include "Camera.h"
 #include "Texture.h"
 #include "Sphere.h"
-#include"Model.h"
+#include "Model.h"
 #include "Skybox.h"
 
-//para iluminación
+//para iluminaciï¿½n
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
@@ -84,7 +84,7 @@ Material Material_opaco;
 //Sphere cabeza = Sphere(0.5, 20, 20);
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
-// animación de la lámpara (Sonic)
+// animaciï¿½n de la lï¿½mpara (Sonic)
 GLfloat postSpin = 0.0f;
 GLfloat postScaleX = 0.0f;
 GLfloat postScaleY = 0.0f;
@@ -97,7 +97,7 @@ GLfloat dirTimer = 0.0f;
 GLfloat moveDirectionalX = 0.0f;
 GLfloat moveDirectionalY = 0.0f;
 
-// movimiento de la cámara con Sonic
+// movimiento de la cï¿½mara con Sonic
 glm::vec3 posicionSonic = glm::vec3(30.0f, 3.0f, 15.0f);
 GLfloat xChange = 0.0f;
 GLfloat sonicVista = 0.0f;
@@ -112,7 +112,7 @@ GLfloat walkCycle;
 GLfloat dondeReset = 0.0f;
 GLfloat diferenciaCycle = 0.0f;
 
-// detección de llaves
+// detecciï¿½n de llaves
 bool* keys;
 
 // articulaciones de Sonic
@@ -136,7 +136,7 @@ GLfloat lemniscateTimer = 0.0f;
 const GLfloat a = 3.0f;
 GLfloat lemniscate_X = 0.0f, lemniscate_Y = 0.0f;
 
-// Banderas de cámara
+// Banderas de cï¿½mara
 GLint cam1 = 0;
 GLint cam2 = 0;
 GLint cam3 = 0;
@@ -155,7 +155,7 @@ static const char* vShader = "shaders/shader_light.vert";
 static const char* fShader = "shaders/shader_light.frag";
 
 
-//función de calculo de normales por promedio de vértices 
+//funciï¿½n de calculo de normales por promedio de vï¿½rtices 
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
 	unsigned int vLength, unsigned int normalOffset)
 {
@@ -458,13 +458,13 @@ int main()
 	Material_opaco = Material(0.3f, 4);
 
 
-	//luz direccional, sólo 1 y siempre debe de existir
+	//luz direccional, sï¿½lo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 0.75f,
 		0.1f, 1.5f,
 		0.0f, -1.0f, 0.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
-	//Declaración de primer luz puntual
+	//Declaraciï¿½n de primer luz puntual
 	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f,
 		-6.0f, 1.5f, 1.5f,
@@ -516,9 +516,9 @@ int main()
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
-		// Se activa una sola cámara.
-		// También se introduce una guardia para el tipo de cámara, para poder cambiar la posición una sola vez.
-		// Cámara 1: Moverse en el plano XZ en tercera persona
+		// Se activa una sola cï¿½mara.
+		// Tambiï¿½n se introduce una guardia para el tipo de cï¿½mara, para poder cambiar la posiciï¿½n una sola vez.
+		// Cï¿½mara 1: Moverse en el plano XZ en tercera persona
 		// TODO: Implementar movimiento del personaje.
 		if (mainWindow.getCamType() == 1) {
 			if (cam1 == 0) {
@@ -590,7 +590,7 @@ int main()
 			printf("\n");
 			*/
 		}
-		// Cámara que mira desde arriba.
+		// Cï¿½mara que mira desde arriba.
 		else if (mainWindow.getCamType() == 2) {
 			if (cam2 == 0) {
 				camera.setCameraPosition(glm::vec3(0.0f, 70.0f, 0.0f));
@@ -613,9 +613,9 @@ int main()
 		else if (mainWindow.getCamType() == 5) {
 			// Muestra de elemento de escenario con SET.
 		}
-		// Podemos implementar más sin problemas.
+		// Podemos implementar mï¿½s sin problemas.
 
-		// Cámara de debug, las demás cámaras son fáciles pues solo es un set. 
+		// Cï¿½mara de debug, las demï¿½s cï¿½maras son fï¿½ciles pues solo es un set. 
 		else if (mainWindow.getCamType() == 0) {
 			if (camDebug == 0) {
 				camDebug = 1;
@@ -648,7 +648,7 @@ int main()
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
 
-		//información en el shader de intensidad especular y brillo
+		//informaciï¿½n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
@@ -656,14 +656,14 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		// luz ligada a la cámara de tipo flash
-		//sirve para que en tiempo de ejecución (dentro del while) se cambien propiedades de la luz
+		// luz ligada a la cï¿½mara de tipo flash
+		//sirve para que en tiempo de ejecuciï¿½n (dentro del while) se cambien propiedades de la luz
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
 		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 		//spotLights[1].SetPos(poscoche + glm::vec(x, y, cofre));
 
-		//información al shader de fuentes de iluminación
+		//informaciï¿½n al shader de fuentes de iluminaciï¿½n
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
@@ -707,7 +707,7 @@ int main()
 		Sonic_Head.RenderModel();
 		model = modelaux;
 
-		// SONIC: CODO IZQUIERDO Y ARTICULACIÓN
+		// SONIC: CODO IZQUIERDO Y ARTICULACIï¿½N
 		model = glm::translate(model, glm::vec3(0.35f, 0.2f, 0.0f));
 		model = glm::rotate(model, -50.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, leftShoulderArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -742,7 +742,7 @@ int main()
 		
 		model = modelaux;
 
-		// SONIC: CODO DERECHA Y ARTICULACIÓN
+		// SONIC: CODO DERECHA Y ARTICULACIï¿½N
 		model = glm::rotate(model, -180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(0.35f, 0.2f, 0.0f));
 		model = glm::rotate(model, 105.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -777,7 +777,7 @@ int main()
 		SonicLeftLeg.RenderModel();
 
 
-		// programación del faro
+		// programaciï¿½n del faro
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(20.5f, -0.75f, 7.0f));
 		model = glm::scale(model, glm::vec3(0.5f + postScaleX, 0.5f + postScaleY, 0.5f + postScaleZ));
@@ -785,7 +785,7 @@ int main()
 		LampPostLower.RenderModel();
 		//model = modelaux;
 
-		//lámpara del paro
+		//lï¿½mpara del paro
 		model = glm::translate(model, glm::vec3(-0.3f, 7.3f, 0.6f));
 		//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		model = glm::rotate(model, postSpin * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -905,7 +905,7 @@ int main()
 			dirTimer = 0;
 		}
 
-		// define hacia dónde se mueve la luz dependiendo de si es de noche o de día
+		// define hacia dï¿½nde se mueve la luz dependiendo de si es de noche o de dï¿½a
 		if (mainWindow.getDayNight() == 0) {
 			dirTimer += 1.0f;
 		}
