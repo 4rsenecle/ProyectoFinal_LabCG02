@@ -1,11 +1,11 @@
 #pragma once
 
-#include <GL/glew.h>
+#include <glew.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm.hpp>
+#include <gtc\matrix_transform.hpp>
 
-#include <GLFW/glfw3.h>
+#include <glfw3.h>
 
 class Camera
 {

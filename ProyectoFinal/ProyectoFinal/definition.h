@@ -1,6 +1,6 @@
 /*
 * definition.h
-*Basado en el cï¿½digo creado por
+*Basado en el código creado por
 *  Created on: 06/09/2016
 *      Author: reynaldo Martell
 */
@@ -8,9 +8,9 @@
 #ifndef HEADERS_DEFINITION_H_
 #define HEADERS_DEFINITION_H_
 
-#include <glm/glm.hpp>
-#include <GL/glew.h>
-#include <glm/gtc/random.hpp>
+#include <glm.hpp>
+#include <glew.h>
+#include <gtc/random.hpp>
 #include <iostream>
 
 typedef struct _VertexColor {

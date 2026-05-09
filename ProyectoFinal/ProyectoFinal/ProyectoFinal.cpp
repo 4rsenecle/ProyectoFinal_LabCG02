@@ -1,4 +1,5 @@
 /*
+Práctica 7: Iluminación 1 
 Pr�ctica 7: Iluminaci�n 1 
 */
 //para cargar imagen
@@ -10,12 +11,12 @@ Pr�ctica 7: Iluminaci�n 1
 #include <vector>
 #include <math.h>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include <glew.h>
+#include <glfw3.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include <glm.hpp>
+#include <gtc\matrix_transform.hpp>
+#include <gtc\type_ptr.hpp>
 //para probar el importer
 //#include<assimp/Importer.hpp>
 
@@ -25,9 +26,10 @@ Pr�ctica 7: Iluminaci�n 1
 #include "Camera.h"
 #include "Texture.h"
 #include "Sphere.h"
-#include "Model.h"
+#include"Model.h"
 #include "Skybox.h"
 
+//para iluminación
 //para iluminaci�n
 #include "CommonValues.h"
 #include "DirectionalLight.h"
@@ -78,7 +80,7 @@ Model SteamPunkHammer;
 Model SteamPunkChair;
 Model SteamPunkCars;
 Model SteamPunkRobot;
-// Brazo derecho e izquierdo están al revés xddddd
+// Brazo derecho e izquierdo est�n al rev�s xddddd
 Model SteamPunkRobotRightArm;
 Model SteamPunkRobotRightForeArm;
 Model SteamPunkRobotLeftArm;
@@ -86,6 +88,22 @@ Model SteamPunkRobotLeftForeArm;
 Model SteamPunkRobotCannon;
 Model SteamPunkRobotLeftLeg;
 Model SteamPunkRobotRightLeg;
+
+
+Model ChaosEmeraldG;
+Model ChaosEmeraldR;
+Model ChaosEmeraldM;
+Model ChaosEmeraldB;
+Model ChaosEmeraldGrey;
+Model ChaosEmeraldY;
+Model ChaosEmeraldC;
+Model Spring;
+Model ChaoKey;
+Model GoalRing;
+
+Model Fountain;
+Model Tree1, Tree2, Tree3;
+Model Bench;
 
 Model Emil_Body;
 Model Emil_Head;
@@ -140,6 +158,7 @@ Material Material_opaco;
 //Sphere cabeza = Sphere(0.5, 20, 20);
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
+// animación de la lámpara (Sonic)
 // animaci�n de la l�mpara (Sonic)
 GLfloat postSpin = 0.0f;
 GLfloat postScaleX = 0.0f;
@@ -153,7 +172,7 @@ GLfloat dirTimer = 0.0f;
 GLfloat moveDirectionalX = 0.0f;
 GLfloat moveDirectionalY = 0.0f;
 
-// movimiento de la cámara con Sonic
+// movimiento de la c�mara con Sonic
 glm::vec3 posicionSonic = glm::vec3(70.0f, 3.0f, -65.0f);
 // movimiento de la c�mara con Sonic
 glm::vec3 posicionSonic = glm::vec3(30.0f, 3.0f, 15.0f);
@@ -170,6 +189,7 @@ GLfloat walkCycle;
 GLfloat dondeReset = 0.0f;
 GLfloat diferenciaCycle = 0.0f;
 
+// detección de llaves
 // detecci�n de llaves
 bool* keys;
 
@@ -214,6 +234,7 @@ GLfloat steamPunkTimer = 0.0f;
 
 
 // Banderas de cámara
+// Banderas de cámara
 // Banderas de c�mara
 GLint cam1 = 0;
 GLint cam2 = 0;
@@ -233,6 +254,7 @@ static const char* vShader = "shaders/shader_light.vert";
 static const char* fShader = "shaders/shader_light.frag";
 
 
+//función de calculo de normales por promedio de vértices 
 //funci�n de calculo de normales por promedio de v�rtices 
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
 	unsigned int vLength, unsigned int normalOffset)
@@ -473,41 +495,7 @@ int main()
 	SonicLeftKnee.LoadModel("Models/rewrite-sonic/source/SonicLeftKnee.obj");
 	SonicLeftLeg = Model();
 	SonicLeftLeg.LoadModel("Models/rewrite-sonic/source/SonicLeftLeg.obj");
-	// MODELO: Emil
-	Emil_Body = Model();
-	Emil_Body.LoadModel("Models/emil/body.obj");
-	Emil_Coat0 = Model();
-	Emil_Coat0.LoadModel("Models/emil/coat_0.obj");
-	Emil_Coat1 = Model();
-	Emil_Coat1.LoadModel("Models/emil/coat_1.obj");
-	Emil_Head = Model();
-	Emil_Head.LoadModel("Models/emil/head.obj");
-	Emil_Left_Arm0 = Model();
-	Emil_Left_Arm0.LoadModel("Models/emil/left_arm_0.obj");
-	Emil_Left_Arm1 = Model();
-	Emil_Left_Arm1.LoadModel("Models/emil/left_arm_1.obj");
-	Emil_Left_Foot = Model();
-	Emil_Left_Foot.LoadModel("Models/emil/left_foot.obj");
-	Emil_Left_Hand = Model();
-	Emil_Left_Hand.LoadModel("Models/emil/left_hand.obj");
-	Emil_Left_Leg0 = Model();
-	Emil_Left_Leg0.LoadModel("Models/emil/left_leg_0.obj");
-	Emil_Left_Leg1 = Model();
-	Emil_Left_Leg1.LoadModel("Models/emil/left_leg_1.obj");
-	Emil_Right_Arm0 = Model();
-	Emil_Right_Arm0.LoadModel("Models/emil/right_arm_0.obj");
-	Emil_Right_Arm1 = Model();
-	Emil_Right_Arm1.LoadModel("Models/emil/right_arm_1.obj");
-	Emil_Right_Foot = Model();
-	Emil_Right_Foot.LoadModel("Models/emil/right_foot.obj");
-	Emil_Right_Hand = Model();
-	Emil_Right_Hand.LoadModel("Models/emil/right_hand.obj");
-	Emil_Right_Leg0 = Model();
-	Emil_Right_Leg0.LoadModel("Models/emil/right_leg_0.obj");
-	Emil_Right_Leg1 = Model();
-	Emil_Right_Leg1.LoadModel("Models/emil/right_leg_1.obj");
-	Emil_Weapon = Model();
-	Emil_Weapon.LoadModel("Models/emil/weapon.obj");
+	
 
 	// MODELOS: Elementos 
 	LampPostLower = Model();
@@ -589,20 +577,6 @@ int main()
 	White_RabbitClock.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitClockArm.obj");
 	White_RabbitRight = Model();
 	White_RabbitRight.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitRightArm.obj");
-	CheshireCat_Body = Model();
-	CheshireCat_Body.LoadModel("Models/cheshire-cat/body.obj");
-	CheshireCat_Head = Model();
-	CheshireCat_Head.LoadModel("Models/cheshire-cat/head.obj");
-	CheshireCat_Tail = Model();
-	CheshireCat_Tail.LoadModel("Models/cheshire-cat/tail.obj");
-	CheshireCat_Left_Arm = Model();
-	CheshireCat_Left_Arm.LoadModel("Models/cheshire-cat/left_arm.obj");
-	CheshireCat_Right_Arm = Model();
-	CheshireCat_Right_Arm.LoadModel("Models/cheshire-cat/right_arm.obj");
-	CheshireCat_Left_Leg = Model();
-	CheshireCat_Left_Leg.LoadModel("Models/cheshire-cat/left_leg.obj");
-	CheshireCat_Right_Leg = Model();
-	CheshireCat_Right_Leg.LoadModel("Models/cheshire-cat/right_leg.obj");
 
 	
 
@@ -647,12 +621,14 @@ int main()
 	Material_opaco = Material(0.3f, 4);
 
 
+	//luz direccional, sólo 1 y siempre debe de existir
 	//luz direccional, s�lo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 0.75f,
 		0.1f, 1.5f,
 		0.0f, -1.0f, 0.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
+	//Declaración de primer luz puntual
 	//Declaraci�n de primer luz puntual
 	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f,
@@ -705,6 +681,9 @@ int main()
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
+		// Se activa una sola cámara.
+		// También se introduce una guardia para el tipo de cámara, para poder cambiar la posición una sola vez.
+		// Cámara 1: Moverse en el plano XZ en tercera persona
 		// Se activa una sola c�mara.
 		// Tambi�n se introduce una guardia para el tipo de c�mara, para poder cambiar la posici�n una sola vez.
 		// C�mara 1: Moverse en el plano XZ en tercera persona
@@ -779,6 +758,7 @@ int main()
 			printf("\n");
 			*/
 		}
+		// Cámara que mira desde arriba.
 		// C�mara que mira desde arriba.
 		else if (mainWindow.getCamType() == 2) {
 			if (cam2 == 0) {
@@ -802,8 +782,10 @@ int main()
 		else if (mainWindow.getCamType() == 5) {
 			// Muestra de elemento de escenario con SET.
 		}
+		// Podemos implementar más sin problemas.
 		// Podemos implementar m�s sin problemas.
 
+		// Cámara de debug, las demás cámaras son fáciles pues solo es un set. 
 		// C�mara de debug, las dem�s c�maras son f�ciles pues solo es un set. 
 		else if (mainWindow.getCamType() == 0) {
 			if (camDebug == 0) {
@@ -838,6 +820,7 @@ int main()
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
 
+		//información en el shader de intensidad especular y brillo
 		//informaci�n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
@@ -846,6 +829,8 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
+		// luz ligada a la cámara de tipo flash
+		//sirve para que en tiempo de ejecución (dentro del while) se cambien propiedades de la luz
 		// luz ligada a la c�mara de tipo flash
 		//sirve para que en tiempo de ejecuci�n (dentro del while) se cambien propiedades de la luz
 		glm::vec3 lowerLight = camera.getCameraPosition();
@@ -853,6 +838,7 @@ int main()
 		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 		//spotLights[1].SetPos(poscoche + glm::vec(x, y, cofre));
 
+		//información al shader de fuentes de iluminación
 		//informaci�n al shader de fuentes de iluminaci�n
 		shaderList[0].SetDirectionalLight(&mainLight);
 		if (mainWindow.getDayNight() == 1) {
@@ -906,6 +892,7 @@ int main()
 		Sonic_Head.RenderModel();
 		model = modelaux;
 
+		// SONIC: CODO IZQUIERDO Y ARTICULACIÓN
 		// SONIC: CODO IZQUIERDO Y ARTICULACI�N
 		model = glm::translate(model, glm::vec3(0.35f, 0.2f, 0.0f));
 		model = glm::rotate(model, -50.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -946,6 +933,7 @@ int main()
 
 		model = modelaux;
 
+		// SONIC: CODO DERECHA Y ARTICULACIÓN
 		// SONIC: CODO DERECHA Y ARTICULACI�N
 		model = glm::rotate(model, -180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(0.35f, 0.2f, 0.0f));
@@ -985,6 +973,12 @@ int main()
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftLeg.RenderModel();
 
+		// Chaos Emeralds
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex) - 5 * sin((2 * chaosEmeraldsComplex) / 3), -60.0f + +2 * cos(chaosEmeraldsComplex) + 5 * cos((2 * chaosEmeraldsComplex) / 3)));
+		model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ChaosEmeraldG.RenderModel();
 		// Chaos Emeralds
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex) - 5 * sin((2 * chaosEmeraldsComplex) / 3), -60.0f + +2 * cos(chaosEmeraldsComplex) + 5 * cos((2 * chaosEmeraldsComplex) / 3)));
@@ -1111,6 +1105,8 @@ int main()
 		ChaosEmeraldM.RenderModel();
 
 		// programación del faro
+
+		// programación del faro
 		// programaci�n del faro
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(90.0f, -0.75f, -70.0f));
@@ -1119,7 +1115,7 @@ int main()
 		LampPostLower.RenderModel();
 		//model = modelaux;
 
-		//lámpara del faro
+		//l�mpara del faro
 		//l�mpara del paro
 		model = glm::translate(model, glm::vec3(-0.3f, 7.3f, 0.6f));
 		//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
@@ -1266,7 +1262,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Fountain.RenderModel();
 
-		// Árboles
+		// �rboles
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-90.0f, 2.0f, 45.0f));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
@@ -1438,6 +1434,10 @@ int main()
 			dirTimer = 0.0f;
 		}
 
+		// define la dirección de la luz
+		dirTimer += 1.5f;
+		moveDirectionalX = cos(0.0001f * dirTimer);
+		moveDirectionalY = -abs(sin(0.0001f * dirTimer));
 		// define la dirección de la luz
 		dirTimer += 1.5f;
 		moveDirectionalX = cos(0.0001f * dirTimer);
