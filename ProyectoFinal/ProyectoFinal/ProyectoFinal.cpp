@@ -696,14 +696,12 @@ int main()
 
 
 	//luz direccional, sólo 1 y siempre debe de existir
-	//luz direccional, s�lo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 0.75f,
 		0.1f, 1.5f,
 		0.0f, -1.0f, 0.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
 	//Declaración de primer luz puntual
-	//Declaraci�n de primer luz puntual
 	pointLights[0] = PointLight(1.0f, 1.0f, 1.0f,
 		3.0f, 3.0f,
 		25.0f, 7.0f, -60.0f,
@@ -874,7 +872,7 @@ int main()
 		// C�mara que mira desde arriba.
 		else if (mainWindow.getCamType() == 2) {
 			if (cam2 == 0) {
-				camera.setCameraPosition(glm::vec3(0.0f, 70.0f, 0.0f));
+				camera.setCameraPosition(glm::vec3(0.0f, 100.0f, 0.0f));
 				camera.setFront(glm::vec3(0.0f, -1.0f, 0.00001f));
 				camera.setRight(glm::vec3(0.0f, 0.0f, 1.0f));
 				camera.setUp(glm::vec3(1.0f, 0.0f, 0.0f));
@@ -927,6 +925,8 @@ int main()
 			cam1 = 0;
 			cam2 = 0;
 			cam3 = 0;
+			cam4 = 0;
+			cam5 = 0;
 		}
 
 
@@ -1563,8 +1563,6 @@ int main()
 		model = glm::translate(model, glm::vec3(2.0f, -0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Bench.RenderModel();
-
-		// Arbustos
 
 		// Luces
 		model = glm::mat4(1.0);
