@@ -1,12 +1,41 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Asus\\source\\repos\\ProyectoFinal_LabCG02\\ProyectoFinal\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{17454B2F-728D-4BA5-BC47-915E25BE6160}|ProyectoFinal\\ProyectoFinal.vcxproj|C:\\Users\\Asus\\source\\repos\\ProyectoFinal_LabCG02\\ProyectoFinal\\ProyectoFinal\\ProyectoFinal.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{17454B2F-728D-4BA5-BC47-915E25BE6160}|ProyectoFinal\\ProyectoFinal.vcxproj|solutionrelative:ProyectoFinal\\ProyectoFinal.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProyectoFinal.cpp",
+              "DocumentMoniker": "C:\\Users\\Asus\\source\\repos\\ProyectoFinal_LabCG02\\ProyectoFinal\\ProyectoFinal\\ProyectoFinal.cpp",
+              "RelativeDocumentMoniker": "ProyectoFinal\\ProyectoFinal.cpp",
+              "ToolTip": "C:\\Users\\Asus\\source\\repos\\ProyectoFinal_LabCG02\\ProyectoFinal\\ProyectoFinal\\ProyectoFinal.cpp",
+              "RelativeToolTip": "ProyectoFinal\\ProyectoFinal.cpp",
+              "ViewState": "AQIAAH0EAAAAAAAAAAAAAGoCAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-05-09T06:08:20.151Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
