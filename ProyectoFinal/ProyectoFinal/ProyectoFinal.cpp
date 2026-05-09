@@ -1,5 +1,5 @@
 /*
-Práctica 7: Iluminación 1 
+Prï¿½ctica 7: Iluminaciï¿½n 1 
 */
 //para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
@@ -10,12 +10,12 @@ Práctica 7: Iluminación 1
 #include <vector>
 #include <math.h>
 
-#include <glew.h>
-#include <glfw3.h>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-#include <glm.hpp>
-#include <gtc\matrix_transform.hpp>
-#include <gtc\type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 //para probar el importer
 //#include<assimp/Importer.hpp>
 
@@ -28,7 +28,7 @@ Práctica 7: Iluminación 1
 #include"Model.h"
 #include "Skybox.h"
 
-//para iluminación
+//para iluminaciï¿½n
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
@@ -85,6 +85,10 @@ Model ChaosEmeraldGrey;
 Model ChaosEmeraldY;
 Model ChaosEmeraldC;
 
+Model Nave_Cuerpo;
+Model Nave_Ala0;
+Model Nave_Ala1;
+Model Nave_Elice;
 
 Skybox skybox_day;
 Skybox skybox_night;
@@ -97,7 +101,7 @@ Material Material_opaco;
 //Sphere cabeza = Sphere(0.5, 20, 20);
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
-// animación de la lámpara (Sonic)
+// animaciï¿½n de la lï¿½mpara (Sonic)
 GLfloat postSpin = 0.0f;
 GLfloat postScaleX = 0.0f;
 GLfloat postScaleY = 0.0f;
@@ -110,7 +114,7 @@ GLfloat dirTimer = 0.0f;
 GLfloat moveDirectionalX = 0.0f;
 GLfloat moveDirectionalY = 0.0f;
 
-// movimiento de la cámara con Sonic
+// movimiento de la cï¿½mara con Sonic
 glm::vec3 posicionSonic = glm::vec3(70.0f, 3.0f, -65.0f);
 GLfloat xChange = 0.0f;
 GLfloat sonicVista = 0.0f;
@@ -125,7 +129,7 @@ GLfloat walkCycle;
 GLfloat dondeReset = 0.0f;
 GLfloat diferenciaCycle = 0.0f;
 
-// detección de llaves
+// detecciï¿½n de llaves
 bool* keys;
 
 // articulaciones de Sonic
@@ -157,7 +161,7 @@ GLfloat chaosEmeraldsComplex;
 
 
 
-// Banderas de cámara
+// Banderas de cï¿½mara
 GLint cam1 = 0;
 GLint cam2 = 0;
 GLint cam3 = 0;
@@ -176,7 +180,7 @@ static const char* vShader = "shaders/shader_light.vert";
 static const char* fShader = "shaders/shader_light.frag";
 
 
-//función de calculo de normales por promedio de vértices 
+//funciï¿½n de calculo de normales por promedio de vï¿½rtices 
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
 	unsigned int vLength, unsigned int normalOffset)
 {
@@ -360,8 +364,59 @@ void CrearDado()
 
 }
 
+//Control de animaciones de la Nave
+#define MAX_FRAMES 100
+float nave_rot_Y=0.0f;
+int i_max_steps = 80;
+int i_curr_steps_nave = 0;
+typedef struct _nave_frame{
+	float ala_rot_Y;
+	float inc_ala_rot_Y;
+}NAVE;
+NAVE nave_swing[MAX_FRAMES];
+int nave_Index=0;
 
+bool nave_first_time=true;
+void nave_swing_interpolation(){
+	nave_swing[nave_Index].inc_ala_rot_Y=(nave_swing[nave_Index+1].ala_rot_Y-nave_swing[nave_Index].ala_rot_Y)/i_max_steps;
+}
+void nave_swing_reset(){
+	nave_rot_Y = nave_swing[0].ala_rot_Y;
+}
 
+int nave_swing_Limit=5;
+void nave_swing_definition(){
+	//Inicio de la animaciÃ³n
+	nave_swing[0].ala_rot_Y=0.0f;
+	//Movimiento brusco para impulso
+	nave_swing[1].ala_rot_Y=-40.0f;
+	//RecuperaciÃ³n lenta hasta llegar a rotaciÃ³n inicial
+	nave_swing[1].ala_rot_Y=-30.0f;
+	nave_swing[2].ala_rot_Y=-20.0f;
+	nave_swing[3].ala_rot_Y=-10.0f;
+	nave_swing[4].ala_rot_Y=0.0f;
+}
+void nave_swing_animate(){
+	if(nave_first_time){
+		nave_swing_interpolation();
+		nave_first_time=false;
+	}
+	if(i_curr_steps_nave>=i_max_steps){
+		nave_Index++;
+		if(nave_Index>=nave_swing_Limit-1){
+			nave_Index=0;
+			i_curr_steps_nave=0;
+			nave_swing_reset();
+			nave_first_time=true;
+		}else{
+			i_curr_steps_nave=0;
+			nave_swing_interpolation();
+		}
+	}else{
+		nave_rot_Y+=nave_swing[nave_Index].inc_ala_rot_Y;
+		i_curr_steps_nave++;
+	}
+}
 
 int main()
 {
@@ -459,7 +514,15 @@ int main()
 	White_RabbitRight = Model();
 	White_RabbitRight.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitRightArm.obj");
 
-	
+	//Nave
+	Nave_Cuerpo = Model();
+	Nave_Cuerpo.LoadModel("Models/nave0.obj");
+	Nave_Ala0 = Model();
+	Nave_Ala0.LoadModel("Models/ala.obj");
+	Nave_Ala1 = Model();
+	Nave_Ala1.LoadModel("Models/ala0.obj");
+	Nave_Elice = Model();
+	Nave_Elice.LoadModel("Models/elice.obj");
 
 	std::vector<std::string> skyboxFacesDay, skyboxFacesNight;
 	
@@ -502,13 +565,13 @@ int main()
 	Material_opaco = Material(0.3f, 4);
 
 
-	//luz direccional, sólo 1 y siempre debe de existir
+	//luz direccional, sï¿½lo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 0.75f,
 		0.1f, 1.5f,
 		0.0f, -1.0f, 0.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
-	//Declaración de primer luz puntual
+	//Declaraciï¿½n de primer luz puntual
 	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f,
 		-6.0f, 1.5f, 1.5f,
@@ -550,6 +613,10 @@ int main()
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
+	//InicializaciÃ³n de los frames de la nave
+	nave_swing_definition();
+	nave_swing_reset();
+	float nave_rot_elices=0;
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
 	{
@@ -560,9 +627,9 @@ int main()
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
-		// Se activa una sola cámara.
-		// También se introduce una guardia para el tipo de cámara, para poder cambiar la posición una sola vez.
-		// Cámara 1: Moverse en el plano XZ en tercera persona
+		// Se activa una sola cï¿½mara.
+		// Tambiï¿½n se introduce una guardia para el tipo de cï¿½mara, para poder cambiar la posiciï¿½n una sola vez.
+		// Cï¿½mara 1: Moverse en el plano XZ en tercera persona
 		// TODO: Implementar movimiento del personaje.
 		if (mainWindow.getCamType() == 1) {
 			if (cam1 == 0) {
@@ -634,7 +701,7 @@ int main()
 			printf("\n");
 			*/
 		}
-		// Cámara que mira desde arriba.
+		// Cï¿½mara que mira desde arriba.
 		else if (mainWindow.getCamType() == 2) {
 			if (cam2 == 0) {
 				camera.setCameraPosition(glm::vec3(0.0f, 70.0f, 0.0f));
@@ -657,9 +724,9 @@ int main()
 		else if (mainWindow.getCamType() == 5) {
 			// Muestra de elemento de escenario con SET.
 		}
-		// Podemos implementar más sin problemas.
+		// Podemos implementar mï¿½s sin problemas.
 
-		// Cámara de debug, las demás cámaras son fáciles pues solo es un set. 
+		// Cï¿½mara de debug, las demï¿½s cï¿½maras son fï¿½ciles pues solo es un set. 
 		else if (mainWindow.getCamType() == 0) {
 			if (camDebug == 0) {
 				camDebug = 1;
@@ -693,7 +760,7 @@ int main()
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
 
-		//información en el shader de intensidad especular y brillo
+		//informaciï¿½n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
@@ -701,14 +768,14 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		// luz ligada a la cámara de tipo flash
-		//sirve para que en tiempo de ejecución (dentro del while) se cambien propiedades de la luz
+		// luz ligada a la cï¿½mara de tipo flash
+		//sirve para que en tiempo de ejecuciï¿½n (dentro del while) se cambien propiedades de la luz
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
 		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 		//spotLights[1].SetPos(poscoche + glm::vec(x, y, cofre));
 
-		//información al shader de fuentes de iluminación
+		//informaciï¿½n al shader de fuentes de iluminaciï¿½n
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
@@ -731,7 +798,42 @@ int main()
 
 		meshList[2]->RenderMesh();
 
-
+		//Nave
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 3.0f, 1.5f));
+		model = glm::rotate(model,0.0f,glm::vec3(0.0f,1.0f,0.0f));
+		model = glm::scale(model,glm::vec3(4.0f,4.0f,4.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Nave_Cuerpo.RenderModel();
+		//ActualizaciÃ³n de animaciÃ³n de alas
+		nave_swing_animate();
+		//Ala 1
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.3f));
+		model = glm::rotate(model,nave_rot_Y*toRadians,glm::vec3(0.0f,1.0f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Nave_Ala0.RenderModel();
+		//Ala 2
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.3f));
+		model = glm::rotate(model,nave_rot_Y*toRadians,glm::vec3(0.0f,-1.0f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Nave_Ala1.RenderModel();
+		//ActualizaciÃ³n de elices
+		nave_rot_elices+=deltaTime*4;
+		//Elice 1
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.35f, -0.30f, -0.35f));
+		model = glm::rotate(model,nave_rot_elices*toRadians,glm::vec3(1.0f,0.0f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Nave_Elice.RenderModel();
+		//Elice 2
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.35f, -0.30f, 0.35f));
+		model = glm::rotate(model,nave_rot_elices*toRadians,glm::vec3(1.0f,0.0f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Nave_Elice.RenderModel();
 
 		// SONIC
 		model = glm::mat4(1.0);
@@ -752,7 +854,7 @@ int main()
 		Sonic_Head.RenderModel();
 		model = modelaux;
 
-		// SONIC: CODO IZQUIERDO Y ARTICULACIÓN
+		// SONIC: CODO IZQUIERDO Y ARTICULACIï¿½N
 		model = glm::translate(model, glm::vec3(0.35f, 0.2f, 0.0f));
 		model = glm::rotate(model, -50.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, leftShoulderArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -787,7 +889,7 @@ int main()
 
 		model = modelaux;
 
-		// SONIC: CODO DERECHA Y ARTICULACIÓN
+		// SONIC: CODO DERECHA Y ARTICULACIï¿½N
 		model = glm::rotate(model, -180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(0.35f, 0.2f, 0.0f));
 		model = glm::rotate(model, 105.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -864,7 +966,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ChaosEmeraldM.RenderModel();
 
-		// programación del faro
+		// programaciï¿½n del faro
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(90.0f, -0.75f, -70.0f));
 		model = glm::scale(model, glm::vec3(0.5f + postScaleX, 0.5f + postScaleY, 0.5f + postScaleZ));
@@ -872,7 +974,7 @@ int main()
 		LampPostLower.RenderModel();
 		//model = modelaux;
 
-		//lámpara del paro
+		//lï¿½mpara del paro
 		model = glm::translate(model, glm::vec3(-0.3f, 7.3f, 0.6f));
 		//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		model = glm::rotate(model, postSpin * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -1027,7 +1129,7 @@ int main()
 			dirTimer = 0.0f;
 		}
 
-		// define la dirección de la luz
+		// define la direcciï¿½n de la luz
 		dirTimer += 1.5f;
 		moveDirectionalX = cos(0.0001f * dirTimer);
 		moveDirectionalY = -abs(sin(0.0001f * dirTimer));
