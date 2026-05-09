@@ -28,6 +28,8 @@ Pr�ctica 7: Iluminaci�n 1
 #include "Model.h"
 #include "Skybox.h"
 
+#define MAX_FRAMES 100
+
 //para iluminaci�n
 #include "CommonValues.h"
 #include "DirectionalLight.h"
@@ -364,8 +366,73 @@ void CrearDado()
 
 }
 
+//Control de animaciones de Cheisel
+float cheshire_body_posX=0,cheshire_body_posY=0;
+int i_max_steps = 100;
+int i_curr_steps_cheshire = 0;
+typedef struct _frame{
+    float body_pos_X;
+    float body_pos_Y;
+    float inc_body_pos_X;
+    float inc_body_pos_Y;
+    float head_rot_X;
+    float inc_head_rot_X;
+}CHESHIRE_IDLE;
+CHESHIRE_IDLE cheshireIdle[MAX_FRAMES];
+int cheshireIdle_Index=0;
 
+void cheshire_idle_interpolation(){
+	cheshireIdle[cheshireIdle_Index].inc_body_pos_X = (cheshireIdle[cheshireIdle_Index+1].body_pos_X-cheshireIdle[cheshireIdle_Index].body_pos_X)/i_max_steps;
+	cheshireIdle[cheshireIdle_Index].inc_body_pos_Y = (cheshireIdle[cheshireIdle_Index+1].body_pos_Y-cheshireIdle[cheshireIdle_Index].body_pos_Y)/i_max_steps;
+}
 
+int cheshireIdle_Limit=9;
+void cheshire_idle_definition(){
+	//Inicio del salto
+	cheshireIdle[0].body_pos_X=0.0f;
+	cheshireIdle[0].body_pos_Y=0.0f;
+	//Elevación izquierda
+	cheshireIdle[1].body_pos_X=0.25f;
+	cheshireIdle[1].body_pos_Y=0.5f;
+	//Punto Maximo
+	cheshireIdle[2].body_pos_X=1.0f;
+	cheshireIdle[2].body_pos_Y=1.0f;
+	//Caida en derecha
+	cheshireIdle[3].body_pos_X=1.75f;
+	cheshireIdle[3].body_pos_Y=0.5f;
+	//Conclusión del salto
+	cheshireIdle[4].body_pos_X=2.0f;
+	cheshireIdle[4].body_pos_Y=0.0f;
+	//Elevación derecha
+	cheshireIdle[5].body_pos_X=1.75f;
+	cheshireIdle[5].body_pos_Y=0.5f;
+	//Punto maximo
+	cheshireIdle[6].body_pos_X=1.0f;
+	cheshireIdle[6].body_pos_Y=1.0f;
+	//Caida en izquierda
+	cheshireIdle[7].body_pos_X=0.25f;
+	cheshireIdle[7].body_pos_Y=0.5f;
+	//Conclusión del salto
+	cheshireIdle[8].body_pos_X=0.0f;
+	cheshireIdle[8].body_pos_Y=0.0f;
+}
+
+void cheshire_idle_animate(){
+	if(i_curr_steps_cheshire>=i_max_steps){//Ya termino la interpolación
+		if(++cheshireIdle_Index>cheshireIdle_Limit-2){//Verifica si la animación ya termino de ejecutarse
+			cheshireIdle_Index=0;
+			cheshire_body_posX=0.0f;
+			cheshire_body_posY=0.0f;
+		}else{//Solo reinicia el contador de interpolación para continuar la siguiente animación
+			i_curr_steps_cheshire = 0;
+			cheshire_idle_interpolation();
+		}
+	}else{//Aplicamos los pequeños cambios en nuestras variables
+		cheshire_body_posX+=cheshireIdle[cheshireIdle_Index].inc_body_pos_X;
+		cheshire_body_posY+=cheshireIdle[cheshireIdle_Index].inc_body_pos_Y;
+		i_curr_steps_cheshire++;
+	}
+}
 
 int main()
 {
@@ -579,9 +646,11 @@ int main()
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
+	cheshire_idle_definition();
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
 	{
+		cheshire_idle_animate();
 		GLfloat now = glfwGetTime();
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
@@ -987,7 +1056,7 @@ int main()
 		//Cheshire Cat
 		//body
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(10.0f, 5.0f, -10.0f));
+		model = glm::translate(model, glm::vec3(10.0f+cheshire_body_posX*2, 5.0f+cheshire_body_posY*2, -10.0f));
 		model = glm::scale(model, glm::vec3(6.0f,6.0f,6.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
