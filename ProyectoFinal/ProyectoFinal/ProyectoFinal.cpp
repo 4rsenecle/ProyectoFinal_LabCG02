@@ -245,6 +245,8 @@ GLfloat robotSpin = 0.0f;
 GLint cam1 = 0;
 GLint cam2 = 0;
 GLint cam3 = 0;
+GLint cam4 = 0;
+GLint cam5 = 0;
 GLint camDebug = 0;
 
 // luz direccional
@@ -252,6 +254,9 @@ DirectionalLight mainLight;
 //para declarar varias luces de tipo pointlight
 PointLight pointLights[MAX_POINT_LIGHTS];
 SpotLight spotLights[MAX_SPOT_LIGHTS];
+
+// spotlights para el cambio de variables
+SpotLight SP1, SP2, SP3, SP4;
 
 // Vertex Shader
 static const char* vShader = "shaders/shader_light.vert";
@@ -631,6 +636,9 @@ int main()
 
 	StreetLight1 = Model();
 	StreetLight1.LoadModel("Models/StreetLight1.obj");
+
+	StreetLight2 = Model();
+	StreetLight2.LoadModel("Models/StreetLight2.obj");
 	
 
 	// NPCs
@@ -724,25 +732,50 @@ int main()
 
 	
 	unsigned int spotLightCount = 0;
-	/*
-	//linterna
-	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
-		0.0f, 2.0f,
-		0.0f, 0.0f, 0.0f,
+	
+	// luz que destaca a Emil
+	spotLights[0] = SpotLight(0.5f, 0.0f, 1.0f,
+		2.0f, 2.0f,
+		-120.0f, 20.0f, 90.0f,
 		0.0f, -1.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		5.0f);
+		1.0f,0.1f, 0.00f,
+		35.0f);
 	spotLightCount++;
 
-	//luz fija
-	spotLights[1] = SpotLight(0.0f, 1.0f, 0.0f,
-		1.0f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		15.0f);
+	SP1 = spotLights[0];
+
+	//StreetLight1
+	spotLights[1] = SpotLight(0.0f, 1.0f, 1.0f,
+		1.0f, 1.0f,
+		-90.5f, 24.0f, -90.5f,
+		0.0f, -1.0f, 0.0f,
+		1.0f, 0.2f, 0.0f,
+		35.0f);
 	spotLightCount++;
-	*/
+
+	SP2 = spotLights[1];
+
+	//StreetLight2
+	spotLights[2] = SpotLight(0.0f, 1.0f, 0.0f,
+		5.0f, 5.0f,
+		30.0f, 22.0f, 75.0f,
+		0.0f, -1.0f, 0.0f,
+		1.0f, 0.3f, 0.00f,
+		35.0f);
+	spotLightCount++;
+
+	SP3 = spotLights[2];
+
+	spotLights[3] = SpotLight(0.0f, 1.0f, 1.0f,
+		5.0f, 5.0f,
+		-50.0f, 20.0f, 5.0f,
+		0.0f, -1.0f, 0.0f,
+		1.0f, 0.03f, 0.00f,
+		50.0f);
+	spotLightCount++;
+	
+	SP4 = spotLights[3];
+
 	//se crean mas luces puntuales y spotlight 
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
@@ -828,6 +861,8 @@ int main()
 			anguloSonic = atan2(sonicFrente.x, sonicFrente.z);
 			cam2 = 0;
 			cam3 = 0;
+			cam4 = 0;
+			cam5 = 0;
 			camDebug = 0;
 			/* funcionaba como debug.
 			printf("FRONT ACTUAL: ");
@@ -851,19 +886,38 @@ int main()
 			camDebug = 0;
 		}
 		else if (mainWindow.getCamType() == 3) {
+			camera.setCameraPosition(glm::vec3(-75.0f, 20.0f, -20.0f));
+			camera.setFront(glm::vec3(1.0f, -1.0f, 1.00001f));
+			cam1 = 0;
+			cam2 = 0;
+			cam4 = 0;
+			cam5 = 0;
+			camDebug = 0;
 			// Muestra de elemento de escenario con SET.
 		}
 		else if (mainWindow.getCamType() == 4) {
+			camera.setCameraPosition(glm::vec3(145.0f, 0.0f, -90.0f));
+			camera.setFront(glm::vec3(-1.0f, 0.5f, -0.00001f));
+			cam1 = 0;
+			cam2 = 0;
+			cam3 = 0;
+			cam5 = 0;
+			camDebug = 0;
 			// Muestra de elemento de escenario con SET.
 		}
 		else if (mainWindow.getCamType() == 5) {
+			camera.setCameraPosition(glm::vec3(-70.0f, 15.0f, 70.0f));
+			camera.setFront(glm::vec3(1.0f, 0.00001f, -0.00001f));
+			cam1 = 0;
+			cam2 = 0;
+			cam3 = 0;
+			cam4 = 0;
+			camDebug = 0;
+			// Muestra de elemento de escenario con SET.
 			// Muestra de elemento de escenario con SET.
 		}
-		// Podemos implementar más sin problemas.
-		// Podemos implementar m�s sin problemas.
 
 		// Cámara de debug, las demás cámaras son fáciles pues solo es un set. 
-		// C�mara de debug, las dem�s c�maras son f�ciles pues solo es un set. 
 		else if (mainWindow.getCamType() == 0) {
 			if (camDebug == 0) {
 				camDebug = 1;
@@ -906,17 +960,7 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		// luz ligada a la cámara de tipo flash
-		//sirve para que en tiempo de ejecución (dentro del while) se cambien propiedades de la luz
-		// luz ligada a la c�mara de tipo flash
-		//sirve para que en tiempo de ejecuci�n (dentro del while) se cambien propiedades de la luz
-		glm::vec3 lowerLight = camera.getCameraPosition();
-		lowerLight.y -= 0.3f;
-		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
-		//spotLights[1].SetPos(poscoche + glm::vec(x, y, cofre));
-
-		//información al shader de fuentes de iluminación
-		//informaci�n al shader de fuentes de iluminaci�n
+		
 		shaderList[0].SetDirectionalLight(&mainLight);
 		if (mainWindow.getDayNight() == 1) {
 			shaderList[0].SetPointLights(pointLights, pointLightCount);
@@ -925,8 +969,87 @@ int main()
 			shaderList[0].SetPointLights(pointLights, 0);
 		}
 
-
-		shaderList[0].SetSpotLights(spotLights, spotLightCount);
+		if (mainWindow.getLight1() == 1 && mainWindow.getLight2() == 1 && mainWindow.getLight3() == 1 && mainWindow.getLight4() == 1) {
+			spotLights[0] = SP1;
+			spotLights[1] = SP2;
+			spotLights[2] = SP3;
+			spotLights[3] = SP4;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount);
+		}
+		else if (mainWindow.getLight1() == 0 && mainWindow.getLight2() == 0 && mainWindow.getLight3() == 0 && mainWindow.getLight4() == 0){
+			shaderList[0].SetSpotLights(spotLights, 0);
+		}
+		else if (mainWindow.getLight1() == 1 && mainWindow.getLight2() == 0 && mainWindow.getLight3() == 0 && mainWindow.getLight4() == 0) {
+			spotLights[0] = SP1;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount-3);
+		}
+		else if (mainWindow.getLight1() == 1 && mainWindow.getLight2() == 1 && mainWindow.getLight3() == 0 && mainWindow.getLight4() == 0) {
+			spotLights[0] = SP1;
+			spotLights[1] = SP2;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);
+		}
+		else if (mainWindow.getLight1() == 1 && mainWindow.getLight2() == 1 && mainWindow.getLight3() == 1 && mainWindow.getLight4() == 0) {
+			spotLights[0] = SP1;
+			spotLights[1] = SP2;
+			spotLights[2] = SP3;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 1);
+		}
+		else if (mainWindow.getLight1() == 1 && mainWindow.getLight2() == 1 && mainWindow.getLight3() == 0 && mainWindow.getLight4() == 1) {
+			spotLights[0] = SP1;
+			spotLights[1] = SP2;
+			spotLights[2] = SP4;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 1);
+		}
+		else if (mainWindow.getLight1() == 1 && mainWindow.getLight2() == 0 && mainWindow.getLight3() == 1 && mainWindow.getLight4() == 1) {
+			spotLights[0] = SP1;
+			spotLights[1] = SP3;
+			spotLights[2] = SP4;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 1);
+		}
+		else if (mainWindow.getLight1() == 0 && mainWindow.getLight2() == 1 && mainWindow.getLight3() == 1 && mainWindow.getLight4() == 1) {
+			spotLights[0] = SP2;
+			spotLights[1] = SP3;
+			spotLights[2] = SP4;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 1);
+		}
+		else if (mainWindow.getLight1() == 1 && mainWindow.getLight2() == 0 && mainWindow.getLight3() == 1 && mainWindow.getLight4() == 0) {
+			spotLights[0] = SP1;
+			spotLights[1] = SP3;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);
+		}
+		else if (mainWindow.getLight1() == 1 && mainWindow.getLight2() == 0 && mainWindow.getLight3() == 0 && mainWindow.getLight4() == 1) {
+			spotLights[0] = SP1;
+			spotLights[1] = SP4;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);
+		}
+		else if (mainWindow.getLight1() == 0 && mainWindow.getLight2() == 1 && mainWindow.getLight3() == 0 && mainWindow.getLight4() == 1) {
+			spotLights[0] = SP2;
+			spotLights[1] = SP4;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);
+		}
+		else if (mainWindow.getLight1() == 0 && mainWindow.getLight2() == 1 && mainWindow.getLight3() == 1 && mainWindow.getLight4() == 0) {
+			spotLights[0] = SP2;
+			spotLights[1] = SP3;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);
+		}
+		else if (mainWindow.getLight1() == 0 && mainWindow.getLight2() == 0 && mainWindow.getLight3() == 1 && mainWindow.getLight4() == 1) {
+			spotLights[0] = SP3;
+			spotLights[1] = SP4;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);
+		}
+		else if (mainWindow.getLight1() == 0 && mainWindow.getLight2() == 1 && mainWindow.getLight3() == 0 && mainWindow.getLight4() == 0) {
+			spotLights[0] = SP2;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 3);
+		}
+		else if (mainWindow.getLight1() == 0 && mainWindow.getLight2() == 0 && mainWindow.getLight3() == 1 && mainWindow.getLight4() == 0) {
+			spotLights[0] = SP3;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 3);
+		}
+		else if (mainWindow.getLight1() == 0 && mainWindow.getLight2() == 0 && mainWindow.getLight3() == 0 && mainWindow.getLight4() == 1) {
+			spotLights[0] = SP4;
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 3);
+		}
+		
 
 
 
@@ -1445,9 +1568,16 @@ int main()
 
 		// Luces
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(30.0f, -2.0f, 55.0f));
+		model = glm::translate(model, glm::vec3(30.0f, -2.0f, 75.0f));
 		model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		StreetLight2.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-95.0f, -2.0f, -95.0f));
+		model = glm::rotate(model, 45.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		StreetLight1.RenderModel();
 

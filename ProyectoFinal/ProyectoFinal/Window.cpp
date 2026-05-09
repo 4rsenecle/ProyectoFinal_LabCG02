@@ -136,6 +136,12 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
 		theWindow->camType = 3;
 	}
+	if (key == GLFW_KEY_4 && action == GLFW_PRESS) {
+		theWindow->camType = 4;
+	}
+	if (key == GLFW_KEY_5 && action == GLFW_PRESS) {
+		theWindow->camType = 5;
+	}
 	// Modo extra que sirve a forma de debuggear
 	if (key == GLFW_KEY_0 && action == GLFW_PRESS) {
 		theWindow->camType = 0;
@@ -146,6 +152,39 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	}
 	if (key == GLFW_KEY_R && action == GLFW_PRESS) {
 		theWindow->robotMove = 1;
+	}
+
+	if (key == GLFW_KEY_6 && action == GLFW_PRESS) {
+		if (theWindow->light1 == 0) {
+			theWindow->light1 = 1;
+		}
+		else {
+			theWindow->light1 = 0;
+		}
+	}
+	if (key == GLFW_KEY_7 && action == GLFW_PRESS) {
+		if (theWindow->light2 == 0) {
+			theWindow->light2 = 1;
+		}
+		else {
+			theWindow->light2 = 0;
+		}
+	}
+	if (key == GLFW_KEY_8 && action == GLFW_PRESS) {
+		if (theWindow->light3 == 0) {
+			theWindow->light3 = 1;
+		}
+		else {
+			theWindow->light3 = 0;
+		}
+	}
+	if (key == GLFW_KEY_9 && action == GLFW_PRESS) {
+		if (theWindow->light4 == 0) {
+			theWindow->light4 = 1;
+		}
+		else {
+			theWindow->light4 = 0;
+		}
 	}
 
 
