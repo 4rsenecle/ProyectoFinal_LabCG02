@@ -87,6 +87,7 @@ Model ChaosEmeraldY;
 Model ChaosEmeraldC;
 Model Spring;
 Model ChaoKey;
+Model GoalRing;
 
 Model Fountain;
 Model Tree1, Tree2, Tree3;
@@ -155,6 +156,7 @@ GLfloat whiteRabbitHeadBob = 0.0f;
 GLfloat lemniscateTimer = 0.0f;
 const GLfloat a = 3.0f;
 GLfloat lemniscate_X = 0.0f, lemniscate_Y = 0.0f;
+GLfloat helixSpin = 0.0f;
 
 // Steampunk Clock
 GLfloat SteamPunkClockFloat = 0.0f;
@@ -441,7 +443,11 @@ int main()
 	LampPostUpper = Model();
 	LampPostUpper.LoadModel("Models/LampPostPole.obj");
 	Balloon_Gift = Model();
-	Balloon_Gift.LoadModel("Models/peachy-balloon-gift/source/BalloonGift.obj");
+	Balloon_Gift.LoadModel("Models/peachy-balloon-gift/BalloonGift.obj");
+	Balloon_Gift_Propeller1 = Model();
+	Balloon_Gift_Propeller1.LoadModel("Models/peachy-balloon-gift/Helix1.obj");
+	Balloon_Gift_Propeller2 = Model();
+	Balloon_Gift_Propeller2.LoadModel("Models/peachy-balloon-gift/Helix2.obj");
 	SteamPunkBooth = Model();
 	SteamPunkBooth.LoadModel("Models/SteamPunkBooth.obj");
 	SteamPunkClock = Model();
@@ -470,6 +476,8 @@ int main()
 	ChaoKey.LoadModel("Models/ChaoKey.obj");
 	Spring = Model();
 	Spring.LoadModel("Models/source/Spring/Spring.obj");
+	GoalRing = Model();
+	GoalRing.LoadModel("Models/source/Goal Ring/GoalRing.obj");
 
 	Tree1 = Model();
 	Tree1.LoadModel("Models/Tree1.obj");
@@ -716,7 +724,7 @@ int main()
 		else
 		{
 			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
-			mainLight.changeLight(0.800f, 0.5f, 0.965f);
+			mainLight.changeLight(0.500f, 0.3f, 0.765f);
 		}
 
 
@@ -784,12 +792,14 @@ int main()
 		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		Sonic_Body.RenderModel();
 
 		// SONIC: CABEZA
 		model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0f));
 		model = glm::rotate(model, headBob * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		Sonic_Head.RenderModel();
 		model = modelaux;
 
@@ -800,17 +810,20 @@ int main()
 
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftElbow.RenderModel();
 
 		// SONIC: BRAZO IZQUIERDO Y ARTICULACION
 		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 		model = glm::rotate(model, leftArmArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftArm.RenderModel();
 
 		// SONIC: MANO IZQUIERDA
 		model = glm::translate(model, glm::vec3(1.3f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftHand.RenderModel();
 
 		// SONIC: RODILLA IZQUIERDA
@@ -818,12 +831,14 @@ int main()
 		model = glm::translate(model, glm::vec3(0.32f, -0.3f, 0.0f));
 		model = glm::rotate(model, leftLegMove * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftKnee.RenderModel();
 
 		// SONIC: PIERNA IZQUIERDA
 		model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f));
 		model = glm::rotate(model, leftKneeBend * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftLeg.RenderModel();
 
 		model = modelaux;
@@ -836,17 +851,20 @@ int main()
 
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftElbow.RenderModel();
 
 		// SONIC: BRAZO DERECHA Y ARTICULACION
 		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 		model = glm::rotate(model, rightArmArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftArm.RenderModel();
 
 		// SONIC: MANO DERECHA
 		model = glm::translate(model, glm::vec3(1.3f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftHand.RenderModel();
 
 		// SONIC: RODILLA DERECHA
@@ -854,12 +872,14 @@ int main()
 		model = glm::translate(model, glm::vec3(-0.32f, -0.3f, 0.0f));
 		model = glm::rotate(model, rightLegMove * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftKnee.RenderModel();
 
 		// SONIC: PIERNA DERECHA
 		model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f));
 		model = glm::rotate(model, rightKneeBend * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftLeg.RenderModel();
 
 		// Chaos Emeralds
@@ -913,18 +933,19 @@ int main()
 		LampPostLower.RenderModel();
 		//model = modelaux;
 
-		//lámpara del paro
+		//lámpara del faro
 		model = glm::translate(model, glm::vec3(-0.3f, 7.3f, 0.6f));
 		//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		model = glm::rotate(model, postSpin * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		LampPostUpper.RenderModel();
-		model = modelaux;
+		
 
 		// Resorte de Sonic
-		model = glm::translate(model, glm::vec3(-360.0f, -10.0f, 10.0f));
-		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-100.0f, -1.0f, -50.0f));
+		model = glm::scale(model, glm::vec3(0.0125f, 0.0125f, 0.0125f));
 		model = glm::rotate(model, postSpin * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -934,9 +955,44 @@ int main()
 		// Balloon Gift
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(90.5f + lemniscate_X, 15.0f + lemniscate_Y, -90.0f));
+		modelaux = model;
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Balloon_Gift.RenderModel();
+
+		model = glm::translate(model, glm::vec3(1.0f, 0.0f, 7.5f));
+		model = glm::rotate(model, helixSpin * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Balloon_Gift_Propeller1.RenderModel();
+
+		model = modelaux;
+
+		model = glm::translate(model, glm::vec3(-0.5f, 0.1f, 7.5f));
+		model = glm::rotate(model, -helixSpin * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Balloon_Gift_Propeller2.RenderModel();
+
+		model = modelaux;
+
+		model = glm::translate(model, glm::vec3(1.0f, 0.0f, -7.5f));
+		model = glm::rotate(model, -helixSpin * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Balloon_Gift_Propeller1.RenderModel();
+
+		model = modelaux;
+
+		model = glm::translate(model, glm::vec3(-0.5f, 0.1f, -7.5f));
+		model = glm::rotate(model, helixSpin * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Balloon_Gift_Propeller2.RenderModel();
+
+		// Chao Key
+
+		// Goal Ring
 
 		// White Rabbit
 		model = glm::mat4(1.0);
@@ -1042,10 +1098,18 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Bench.RenderModel();
 
+		model = glm::translate(model, glm::vec3(0.0f, -0.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Bench.RenderModel();
+
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(120.0f, -2.0f, -70.0f));
+		model = glm::translate(model, glm::vec3(130.0f, -2.0f, -55.0f));
 		model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(7.5f, 7.5f, 7.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Bench.RenderModel();
+
+		model = glm::translate(model, glm::vec3(2.0f, -0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Bench.RenderModel();
 
@@ -1132,14 +1196,10 @@ int main()
 		// cambia la luz cada cierto tiempo
 		mainLight.setDirection(glm::vec3(moveDirectionalX, moveDirectionalY, 0.0f));
 		if (dirTimer >= 31000 && mainWindow.getDayNight() == 0) {
-			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
-			mainLight.changeLight(1.0f, 0.875f, 0.8f);
 			mainWindow.setDayNight(1);
 			dirTimer = 0.0f;
 		}
 		else if (dirTimer >= 31000 && mainWindow.getDayNight() == 1) {
-			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection);
-			mainLight.changeLight(0.800f, 0.5f, 0.965f);
 			mainWindow.setDayNight(0);
 			dirTimer = 0.0f;
 		}
@@ -1163,6 +1223,7 @@ int main()
 		lemniscateTimer += 0.003f;
 		lemniscate_X = ((a*sqrt(2)*cos(lemniscateTimer))/1+pow(sin(lemniscateTimer), 2));
 		lemniscate_Y = ((a * sqrt(2) * cos(lemniscateTimer)*sin(lemniscateTimer)) / 1 + pow(sin(lemniscateTimer), 2));
+		helixSpin += 2.0f;
 
 
 		glUseProgram(0);
