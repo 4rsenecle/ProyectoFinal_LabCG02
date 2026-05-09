@@ -367,23 +367,25 @@ void CrearDado()
 }
 
 //Control de animaciones de Cheisel
-float cheshire_body_posX=0,cheshire_body_posY=0;
-int i_max_steps = 100;
+float cheshire_body_posX=0,cheshire_body_posY=0,cheshire_head_rotZ=0.0f;
+int i_max_steps = 80;
 int i_curr_steps_cheshire = 0;
 typedef struct _frame{
     float body_pos_X;
     float body_pos_Y;
     float inc_body_pos_X;
     float inc_body_pos_Y;
-    float head_rot_X;
-    float inc_head_rot_X;
+    float head_rot_Z;
+    float inc_head_rot_Z;
 }CHESHIRE_IDLE;
 CHESHIRE_IDLE cheshireIdle[MAX_FRAMES];
 int cheshireIdle_Index=0;
 
+bool cheshire_first_interpolation=true;
 void cheshire_idle_interpolation(){
 	cheshireIdle[cheshireIdle_Index].inc_body_pos_X = (cheshireIdle[cheshireIdle_Index+1].body_pos_X-cheshireIdle[cheshireIdle_Index].body_pos_X)/i_max_steps;
 	cheshireIdle[cheshireIdle_Index].inc_body_pos_Y = (cheshireIdle[cheshireIdle_Index+1].body_pos_Y-cheshireIdle[cheshireIdle_Index].body_pos_Y)/i_max_steps;
+	cheshireIdle[cheshireIdle_Index].inc_head_rot_Z = (cheshireIdle[cheshireIdle_Index+1].head_rot_Z-cheshireIdle[cheshireIdle_Index].head_rot_Z)/i_max_steps;
 }
 
 int cheshireIdle_Limit=9;
@@ -391,48 +393,74 @@ void cheshire_idle_definition(){
 	//Inicio del salto
 	cheshireIdle[0].body_pos_X=0.0f;
 	cheshireIdle[0].body_pos_Y=0.0f;
+	cheshireIdle[0].head_rot_Z=45.0f;
 	//Elevación izquierda
 	cheshireIdle[1].body_pos_X=0.25f;
 	cheshireIdle[1].body_pos_Y=0.5f;
+	cheshireIdle[1].head_rot_Z=22.5f;
 	//Punto Maximo
 	cheshireIdle[2].body_pos_X=1.0f;
 	cheshireIdle[2].body_pos_Y=1.0f;
+	cheshireIdle[2].head_rot_Z=0.0f;
 	//Caida en derecha
 	cheshireIdle[3].body_pos_X=1.75f;
 	cheshireIdle[3].body_pos_Y=0.5f;
+	cheshireIdle[3].head_rot_Z=-22.5f;
 	//Conclusión del salto
 	cheshireIdle[4].body_pos_X=2.0f;
 	cheshireIdle[4].body_pos_Y=0.0f;
+	cheshireIdle[4].head_rot_Z=-45.0f;
 	//Elevación derecha
 	cheshireIdle[5].body_pos_X=1.75f;
 	cheshireIdle[5].body_pos_Y=0.5f;
+	cheshireIdle[5].head_rot_Z=-22.5f;
 	//Punto maximo
 	cheshireIdle[6].body_pos_X=1.0f;
 	cheshireIdle[6].body_pos_Y=1.0f;
+	cheshireIdle[6].head_rot_Z=0.0f;
 	//Caida en izquierda
 	cheshireIdle[7].body_pos_X=0.25f;
 	cheshireIdle[7].body_pos_Y=0.5f;
+	cheshireIdle[7].head_rot_Z=22.5f;
 	//Conclusión del salto
 	cheshireIdle[8].body_pos_X=0.0f;
 	cheshireIdle[8].body_pos_Y=0.0f;
+	cheshireIdle[8].head_rot_Z=45.0f;
+}
+
+void cheshire_idle_reset(){
+	cheshire_body_posX = cheshireIdle[0].body_pos_X;
+	cheshire_body_posY = cheshireIdle[0].body_pos_Y;
+	cheshire_head_rotZ = cheshireIdle[0].head_rot_Z;
 }
 
 void cheshire_idle_animate(){
+	if(cheshire_first_interpolation){
+		cheshire_idle_interpolation();
+		cheshire_first_interpolation=false;
+	}
 	if(i_curr_steps_cheshire>=i_max_steps){//Ya termino la interpolación
-		if(++cheshireIdle_Index>cheshireIdle_Limit-2){//Verifica si la animación ya termino de ejecutarse
+		cheshireIdle_Index++;
+		if(cheshireIdle_Index>=cheshireIdle_Limit-1){//Verifica si la animación ya termino de ejecutarse
 			cheshireIdle_Index=0;
-			cheshire_body_posX=0.0f;
-			cheshire_body_posY=0.0f;
+			i_curr_steps_cheshire = 0;
+			cheshire_idle_reset();
+			cheshire_first_interpolation=true;
 		}else{//Solo reinicia el contador de interpolación para continuar la siguiente animación
 			i_curr_steps_cheshire = 0;
+			printf("%f\t%i\n",cheshire_head_rotZ,cheshireIdle_Index);
 			cheshire_idle_interpolation();
 		}
 	}else{//Aplicamos los pequeños cambios en nuestras variables
 		cheshire_body_posX+=cheshireIdle[cheshireIdle_Index].inc_body_pos_X;
 		cheshire_body_posY+=cheshireIdle[cheshireIdle_Index].inc_body_pos_Y;
+		cheshire_head_rotZ+=cheshireIdle[cheshireIdle_Index].inc_head_rot_Z;
 		i_curr_steps_cheshire++;
 	}
 }
+
+float emil_Y_movement=0.0f;
+float emil_head_Y_rotation=0.0f;
 
 int main()
 {
@@ -647,10 +675,10 @@ int main()
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	cheshire_idle_definition();
+	cheshire_idle_reset();
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
 	{
-		cheshire_idle_animate();
 		GLfloat now = glfwGetTime();
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
@@ -922,6 +950,8 @@ int main()
 		//body
 		model = glm::mat4(1.0);
 		model = glm::translate(model,glm::vec3(-10.0f,14.0f,10.0f));
+		emil_Y_movement+=deltaTime*0.03;
+		model = glm::translate(model,glm::vec3(0.0f,1.5f*sin(emil_Y_movement),0.0f));
 		model = glm::scale(model, glm::vec3(10.0f,10.0f,10.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -929,13 +959,15 @@ int main()
 		//head
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.0f,0.29f,0.08f));
+		emil_head_Y_rotation+=deltaTime*0.005;
+		model = glm::rotate(model,55*sin(emil_head_Y_rotation)*toRadians,glm::vec3(0.0f,1.0f,0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Head.RenderModel();
 		//coat 0
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.0f,0.32f-0.1f,0.05f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Emil_Coat0.RenderModel();
+		//Emil_Coat0.RenderModel();
 		//coat 1
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Coat1.RenderModel();
@@ -943,6 +975,7 @@ int main()
 		//arm 0
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.1f,0.15f,0.0f));
+		model = glm::rotate(model, 80*toRadians,glm::vec3(0.0f,0.0f,-1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Left_Arm0.RenderModel();
 		//arm 1
@@ -957,6 +990,7 @@ int main()
 		//arm 0
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-0.1f,0.15f,0.0f));
+		model = glm::rotate(model, 80*toRadians,glm::vec3(0.0f,0.0f,1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Right_Arm0.RenderModel();
 		//arm 1
@@ -983,6 +1017,7 @@ int main()
 		Emil_Left_Leg1.RenderModel();
 		//foot
 		model = glm::translate(model, glm::vec3(-0.01f,-0.33f,-0.01f));
+		model = glm::rotate(model,45*toRadians,glm::vec3(1.0f,0.0f,0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Left_Foot.RenderModel();
 		//right_leg
@@ -997,6 +1032,7 @@ int main()
 		Emil_Right_Leg1.RenderModel();
 		//foot
 		model = glm::translate(model, glm::vec3(0.01f,-0.33f,-0.01f));
+		model = glm::rotate(model,45*toRadians,glm::vec3(1.0f,0.0f,0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Right_Foot.RenderModel();
 
@@ -1054,9 +1090,10 @@ int main()
 		White_RabbitClock.RenderModel();
 
 		//Cheshire Cat
+		cheshire_idle_animate();
 		//body
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(10.0f+cheshire_body_posX*2, 5.0f+cheshire_body_posY*2, -10.0f));
+		model = glm::translate(model, glm::vec3(10.0f+cheshire_body_posX, 5.0f+cheshire_body_posY, -10.0f));
 		model = glm::scale(model, glm::vec3(6.0f,6.0f,6.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1064,6 +1101,7 @@ int main()
 		//head
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.0f,0.325f,0.0f));
+		model = glm::rotate(model, cheshire_head_rotZ*toRadians,glm::vec3(0.0f,0.0f,1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		CheshireCat_Head.RenderModel();
 		//tail
