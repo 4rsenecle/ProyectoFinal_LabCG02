@@ -21,6 +21,8 @@ public:
 	GLint getDayNight() { return day_night; }
 	void setDayNight(GLint value) {day_night = value; }
 	GLint getMoveLampPost() { return moveLampPost; }
+	GLint getMoveCar() { return moveCar; }
+	void setMoveCar(GLint value) { moveCar = value; }
 	GLint getCamType() { return camType; }
 	void setMoveLampPost(GLint value) { moveLampPost = value; }
 
@@ -39,6 +41,7 @@ private:
 	GLfloat muevex;
 	GLint day_night = 0;
 	GLint moveLampPost = 0;
+	GLint moveCar = 0;
 	GLint camType = 1;
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);

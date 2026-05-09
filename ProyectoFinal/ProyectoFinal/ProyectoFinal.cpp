@@ -76,6 +76,7 @@ Model SteamPunkBooth;
 Model SteamPunkClock;
 Model SteamPunkHammer;
 Model SteamPunkChair;
+Model SteamPunkCars;
 
 Model ChaosEmeraldG;
 Model ChaosEmeraldR;
@@ -84,6 +85,12 @@ Model ChaosEmeraldB;
 Model ChaosEmeraldGrey;
 Model ChaosEmeraldY;
 Model ChaosEmeraldC;
+Model Spring;
+Model ChaoKey;
+
+Model Fountain;
+Model Tree1, Tree2, Tree3;
+Model Bench;
 
 
 Skybox skybox_day;
@@ -154,6 +161,16 @@ GLfloat SteamPunkClockFloat = 0.0f;
 
 // Chaos Emeralds
 GLfloat chaosEmeraldsComplex;
+
+// Movimiento Carro Steampunk
+GLfloat carroX = 0.0f;
+GLfloat carroY = 0.0f;
+GLfloat carroZ = -15.0f;
+GLfloat carroScaleX = 0.0f;
+GLfloat carroScaleY = 0.0f;
+GLfloat carroScaleZ = 0.0f;
+GLfloat carroRotate = -90.0f;
+GLfloat steamPunkTimer = 0.0f;
 
 
 
@@ -433,6 +450,8 @@ int main()
 	SteamPunkHammer.LoadModel("Models/SteamPunkHammer.obj");
 	SteamPunkChair = Model();
 	SteamPunkChair.LoadModel("Models/SteamPunkChair.obj");
+	SteamPunkCars = Model();
+	SteamPunkCars.LoadModel("Models/SteamPunkCar.obj");
 	ChaosEmeraldG = Model();
 	ChaosEmeraldG.LoadModel("Models/source/GreenChaosEmerald.obj");
 	ChaosEmeraldY = Model();
@@ -447,6 +466,21 @@ int main()
 	ChaosEmeraldM.LoadModel("Models/source/MagentaChaosEmerald.obj");
 	ChaosEmeraldC = Model();
 	ChaosEmeraldC.LoadModel("Models/source/CyanChaosEmerald.obj");
+	ChaoKey = Model();
+	ChaoKey.LoadModel("Models/ChaoKey.obj");
+	Spring = Model();
+	Spring.LoadModel("Models/source/Spring/Spring.obj");
+
+	Tree1 = Model();
+	Tree1.LoadModel("Models/Tree1.obj");
+	Tree2 = Model();
+	Tree2.LoadModel("Models/Tree2.obj");
+	Tree3 = Model();
+	Tree3.LoadModel("Models/Tree3.obj");
+	Fountain = Model();
+	Fountain.LoadModel("Models/Fountain.obj");
+	Bench = Model();
+	Bench.LoadModel("Models/Bench.obj");
 	
 
 	// NPCs
@@ -710,7 +744,14 @@ int main()
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
-		shaderList[0].SetPointLights(pointLights, pointLightCount);
+		if (mainWindow.getDayNight() == 1) {
+			shaderList[0].SetPointLights(pointLights, pointLightCount);
+		}
+		else {
+			shaderList[0].SetPointLights(pointLights, 0);
+		}
+		
+
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
 
@@ -881,6 +922,15 @@ int main()
 		LampPostUpper.RenderModel();
 		model = modelaux;
 
+		// Resorte de Sonic
+		model = glm::translate(model, glm::vec3(-360.0f, -10.0f, 10.0f));
+		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
+		model = glm::rotate(model, postSpin * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Spring.RenderModel();
+		model = modelaux;
+
 		// Balloon Gift
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(90.5f + lemniscate_X, 15.0f + lemniscate_Y, -90.0f));
@@ -947,9 +997,59 @@ int main()
 		model = glm::translate(model, glm::vec3(30.0f, 3.5f, 45.0f));
 		model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
-		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SteamPunkChair.RenderModel();
+
+		// Carro Steampunk
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f + carroX, 3.5f, 0.0f + carroZ));
+		model = glm::rotate(model, (carroRotate) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(2.0f + carroScaleX, 2.0f + carroScaleY, 2.0f + carroScaleZ));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkCars.RenderModel();
+
+		// Fuente
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-50.0f, 0.0f, 5.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Fountain.RenderModel();
+
+		// Árboles
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-90.0f, 2.0f, 45.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Tree1.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-80.0f, 2.0f, 37.5f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Tree2.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-80.0f, 2.0f, 52.5f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Tree3.RenderModel();
+
+		// Bancas
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-120.0f, -0.5f, 70.0f));
+		model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.5f, 7.5f, 7.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Bench.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(120.0f, -2.0f, -70.0f));
+		model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.5f, 7.5f, 7.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Bench.RenderModel();
+
+
 
 		if (mainWindow.getMoveLampPost() == 1) {
 
@@ -1010,6 +1110,23 @@ int main()
 				postScaleX = postScaleY = postScaleZ = 0;
 			}
 
+		}
+
+		if (mainWindow.getMoveCar() == 1) {
+			steamPunkTimer += 0.5f;
+			carroScaleZ = carroScaleX = sin(steamPunkTimer * 0.04f)*0.4;
+			carroScaleY = -sin(steamPunkTimer * 0.04f)*0.4;
+			carroRotate = steamPunkTimer * 0.57f - 90.0f;
+			carroX = -sin(steamPunkTimer * 0.01f) * 15.0f;
+			carroY = sin(steamPunkTimer * 0.1f);
+			carroZ = -cos(steamPunkTimer * 0.01f) * 15.0f;
+			if (steamPunkTimer == 628.0f) {
+				mainWindow.setMoveCar(0);
+				steamPunkTimer = 0.0f;
+				carroScaleZ = carroScaleX = carroScaleY = carroX = carroY = 0.0f;
+				carroZ = -15.0f;
+				carroRotate = -90.0f;
+			}
 		}
 
 		// cambia la luz cada cierto tiempo

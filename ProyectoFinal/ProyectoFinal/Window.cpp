@@ -141,6 +141,10 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow->camType = 0;
 	}
 
+	if (key == GLFW_KEY_C && action == GLFW_PRESS) {
+		theWindow->moveCar = 1;
+	}
+
 
 
 	if (key >= 0 && key < 1024)
