@@ -1,5 +1,5 @@
 /*
-Pr·ctica 7: IluminaciÛn 1 
+PrÔøΩctica 7: IluminaciÔøΩn 1 
 */
 //para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
@@ -10,12 +10,12 @@ Pr·ctica 7: IluminaciÛn 1
 #include <vector>
 #include <math.h>
 
-#include <glew.h>
-#include <glfw3.h>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-#include <glm.hpp>
-#include <gtc\matrix_transform.hpp>
-#include <gtc\type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 //para probar el importer
 //#include<assimp/Importer.hpp>
 
@@ -25,10 +25,10 @@ Pr·ctica 7: IluminaciÛn 1
 #include "Camera.h"
 #include "Texture.h"
 #include "Sphere.h"
-#include"Model.h"
+#include "Model.h"
 #include "Skybox.h"
 
-//para iluminaciÛn
+//para iluminaciÔøΩn
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
@@ -78,7 +78,7 @@ Model SteamPunkHammer;
 Model SteamPunkChair;
 Model SteamPunkCars;
 Model SteamPunkRobot;
-// Brazo derecho e izquierdo est·n al revÈs xddddd
+// Brazo derecho e izquierdo est√°n al rev√©s xddddd
 Model SteamPunkRobotRightArm;
 Model SteamPunkRobotRightForeArm;
 Model SteamPunkRobotLeftArm;
@@ -87,6 +87,23 @@ Model SteamPunkRobotCannon;
 Model SteamPunkRobotLeftLeg;
 Model SteamPunkRobotRightLeg;
 
+Model Emil_Body;
+Model Emil_Head;
+Model Emil_Coat0;
+Model Emil_Coat1;
+Model Emil_Weapon;
+Model Emil_Left_Leg0;
+Model Emil_Left_Leg1;
+Model Emil_Right_Leg0;
+Model Emil_Right_Leg1;
+Model Emil_Left_Arm0;
+Model Emil_Left_Arm1;
+Model Emil_Right_Arm0;
+Model Emil_Right_Arm1;
+Model Emil_Left_Hand;
+Model Emil_Right_Hand;
+Model Emil_Left_Foot;
+Model Emil_Right_Foot;
 
 Model ChaosEmeraldG;
 Model ChaosEmeraldR;
@@ -104,6 +121,14 @@ Model Tree1, Tree2, Tree3;
 Model Bench;
 
 
+Model CheshireCat_Body;
+Model CheshireCat_Tail;
+Model CheshireCat_Head;
+Model CheshireCat_Right_Arm;
+Model CheshireCat_Right_Leg;
+Model CheshireCat_Left_Arm;
+Model CheshireCat_Left_Leg;
+
 Skybox skybox_day;
 Skybox skybox_night;
 
@@ -115,7 +140,7 @@ Material Material_opaco;
 //Sphere cabeza = Sphere(0.5, 20, 20);
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
-// animaciÛn de la l·mpara (Sonic)
+// animaciÔøΩn de la lÔøΩmpara (Sonic)
 GLfloat postSpin = 0.0f;
 GLfloat postScaleX = 0.0f;
 GLfloat postScaleY = 0.0f;
@@ -128,8 +153,10 @@ GLfloat dirTimer = 0.0f;
 GLfloat moveDirectionalX = 0.0f;
 GLfloat moveDirectionalY = 0.0f;
 
-// movimiento de la c·mara con Sonic
+// movimiento de la c√°mara con Sonic
 glm::vec3 posicionSonic = glm::vec3(70.0f, 3.0f, -65.0f);
+// movimiento de la cÔøΩmara con Sonic
+glm::vec3 posicionSonic = glm::vec3(30.0f, 3.0f, 15.0f);
 GLfloat xChange = 0.0f;
 GLfloat sonicVista = 0.0f;
 glm::vec3 sonicFrente;
@@ -143,7 +170,7 @@ GLfloat walkCycle;
 GLfloat dondeReset = 0.0f;
 GLfloat diferenciaCycle = 0.0f;
 
-// detecciÛn de llaves
+// detecciÔøΩn de llaves
 bool* keys;
 
 // articulaciones de Sonic
@@ -186,7 +213,8 @@ GLfloat steamPunkTimer = 0.0f;
 
 
 
-// Banderas de c·mara
+// Banderas de c√°mara
+// Banderas de cÔøΩmara
 GLint cam1 = 0;
 GLint cam2 = 0;
 GLint cam3 = 0;
@@ -205,7 +233,7 @@ static const char* vShader = "shaders/shader_light.vert";
 static const char* fShader = "shaders/shader_light.frag";
 
 
-//funciÛn de calculo de normales por promedio de vÈrtices 
+//funciÔøΩn de calculo de normales por promedio de vÔøΩrtices 
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
 	unsigned int vLength, unsigned int normalOffset)
 {
@@ -445,7 +473,41 @@ int main()
 	SonicLeftKnee.LoadModel("Models/rewrite-sonic/source/SonicLeftKnee.obj");
 	SonicLeftLeg = Model();
 	SonicLeftLeg.LoadModel("Models/rewrite-sonic/source/SonicLeftLeg.obj");
-	
+	// MODELO: Emil
+	Emil_Body = Model();
+	Emil_Body.LoadModel("Models/emil/body.obj");
+	Emil_Coat0 = Model();
+	Emil_Coat0.LoadModel("Models/emil/coat_0.obj");
+	Emil_Coat1 = Model();
+	Emil_Coat1.LoadModel("Models/emil/coat_1.obj");
+	Emil_Head = Model();
+	Emil_Head.LoadModel("Models/emil/head.obj");
+	Emil_Left_Arm0 = Model();
+	Emil_Left_Arm0.LoadModel("Models/emil/left_arm_0.obj");
+	Emil_Left_Arm1 = Model();
+	Emil_Left_Arm1.LoadModel("Models/emil/left_arm_1.obj");
+	Emil_Left_Foot = Model();
+	Emil_Left_Foot.LoadModel("Models/emil/left_foot.obj");
+	Emil_Left_Hand = Model();
+	Emil_Left_Hand.LoadModel("Models/emil/left_hand.obj");
+	Emil_Left_Leg0 = Model();
+	Emil_Left_Leg0.LoadModel("Models/emil/left_leg_0.obj");
+	Emil_Left_Leg1 = Model();
+	Emil_Left_Leg1.LoadModel("Models/emil/left_leg_1.obj");
+	Emil_Right_Arm0 = Model();
+	Emil_Right_Arm0.LoadModel("Models/emil/right_arm_0.obj");
+	Emil_Right_Arm1 = Model();
+	Emil_Right_Arm1.LoadModel("Models/emil/right_arm_1.obj");
+	Emil_Right_Foot = Model();
+	Emil_Right_Foot.LoadModel("Models/emil/right_foot.obj");
+	Emil_Right_Hand = Model();
+	Emil_Right_Hand.LoadModel("Models/emil/right_hand.obj");
+	Emil_Right_Leg0 = Model();
+	Emil_Right_Leg0.LoadModel("Models/emil/right_leg_0.obj");
+	Emil_Right_Leg1 = Model();
+	Emil_Right_Leg1.LoadModel("Models/emil/right_leg_1.obj");
+	Emil_Weapon = Model();
+	Emil_Weapon.LoadModel("Models/emil/weapon.obj");
 
 	// MODELOS: Elementos 
 	LampPostLower = Model();
@@ -527,6 +589,20 @@ int main()
 	White_RabbitClock.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitClockArm.obj");
 	White_RabbitRight = Model();
 	White_RabbitRight.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitRightArm.obj");
+	CheshireCat_Body = Model();
+	CheshireCat_Body.LoadModel("Models/cheshire-cat/body.obj");
+	CheshireCat_Head = Model();
+	CheshireCat_Head.LoadModel("Models/cheshire-cat/head.obj");
+	CheshireCat_Tail = Model();
+	CheshireCat_Tail.LoadModel("Models/cheshire-cat/tail.obj");
+	CheshireCat_Left_Arm = Model();
+	CheshireCat_Left_Arm.LoadModel("Models/cheshire-cat/left_arm.obj");
+	CheshireCat_Right_Arm = Model();
+	CheshireCat_Right_Arm.LoadModel("Models/cheshire-cat/right_arm.obj");
+	CheshireCat_Left_Leg = Model();
+	CheshireCat_Left_Leg.LoadModel("Models/cheshire-cat/left_leg.obj");
+	CheshireCat_Right_Leg = Model();
+	CheshireCat_Right_Leg.LoadModel("Models/cheshire-cat/right_leg.obj");
 
 	
 
@@ -571,13 +647,13 @@ int main()
 	Material_opaco = Material(0.3f, 4);
 
 
-	//luz direccional, sÛlo 1 y siempre debe de existir
+	//luz direccional, sÔøΩlo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 0.75f,
 		0.1f, 1.5f,
 		0.0f, -1.0f, 0.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
-	//DeclaraciÛn de primer luz puntual
+	//DeclaraciÔøΩn de primer luz puntual
 	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f,
 		-6.0f, 1.5f, 1.5f,
@@ -629,9 +705,9 @@ int main()
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
-		// Se activa una sola c·mara.
-		// TambiÈn se introduce una guardia para el tipo de c·mara, para poder cambiar la posiciÛn una sola vez.
-		// C·mara 1: Moverse en el plano XZ en tercera persona
+		// Se activa una sola cÔøΩmara.
+		// TambiÔøΩn se introduce una guardia para el tipo de cÔøΩmara, para poder cambiar la posiciÔøΩn una sola vez.
+		// CÔøΩmara 1: Moverse en el plano XZ en tercera persona
 		// TODO: Implementar movimiento del personaje.
 		if (mainWindow.getCamType() == 1) {
 			if (cam1 == 0) {
@@ -703,7 +779,7 @@ int main()
 			printf("\n");
 			*/
 		}
-		// C·mara que mira desde arriba.
+		// CÔøΩmara que mira desde arriba.
 		else if (mainWindow.getCamType() == 2) {
 			if (cam2 == 0) {
 				camera.setCameraPosition(glm::vec3(0.0f, 70.0f, 0.0f));
@@ -726,9 +802,9 @@ int main()
 		else if (mainWindow.getCamType() == 5) {
 			// Muestra de elemento de escenario con SET.
 		}
-		// Podemos implementar m·s sin problemas.
+		// Podemos implementar mÔøΩs sin problemas.
 
-		// C·mara de debug, las dem·s c·maras son f·ciles pues solo es un set. 
+		// CÔøΩmara de debug, las demÔøΩs cÔøΩmaras son fÔøΩciles pues solo es un set. 
 		else if (mainWindow.getCamType() == 0) {
 			if (camDebug == 0) {
 				camDebug = 1;
@@ -762,7 +838,7 @@ int main()
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
 
-		//informaciÛn en el shader de intensidad especular y brillo
+		//informaciÔøΩn en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
@@ -770,14 +846,14 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		// luz ligada a la c·mara de tipo flash
-		//sirve para que en tiempo de ejecuciÛn (dentro del while) se cambien propiedades de la luz
+		// luz ligada a la cÔøΩmara de tipo flash
+		//sirve para que en tiempo de ejecuciÔøΩn (dentro del while) se cambien propiedades de la luz
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
 		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 		//spotLights[1].SetPos(poscoche + glm::vec(x, y, cofre));
 
-		//informaciÛn al shader de fuentes de iluminaciÛn
+		//informaciÔøΩn al shader de fuentes de iluminaciÔøΩn
 		shaderList[0].SetDirectionalLight(&mainLight);
 		if (mainWindow.getDayNight() == 1) {
 			shaderList[0].SetPointLights(pointLights, pointLightCount);
@@ -830,7 +906,7 @@ int main()
 		Sonic_Head.RenderModel();
 		model = modelaux;
 
-		// SONIC: CODO IZQUIERDO Y ARTICULACI”N
+		// SONIC: CODO IZQUIERDO Y ARTICULACIÔøΩN
 		model = glm::translate(model, glm::vec3(0.35f, 0.2f, 0.0f));
 		model = glm::rotate(model, -50.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, leftShoulderArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -870,7 +946,7 @@ int main()
 
 		model = modelaux;
 
-		// SONIC: CODO DERECHA Y ARTICULACI”N
+		// SONIC: CODO DERECHA Y ARTICULACIÔøΩN
 		model = glm::rotate(model, -180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(0.35f, 0.2f, 0.0f));
 		model = glm::rotate(model, 105.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -915,6 +991,88 @@ int main()
 		model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ChaosEmeraldG.RenderModel();
+		// EMIL
+		//body
+		model = glm::mat4(1.0);
+		model = glm::translate(model,glm::vec3(-10.0f,14.0f,10.0f));
+		model = glm::scale(model, glm::vec3(10.0f,10.0f,10.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Body.RenderModel();
+		//head
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f,0.29f,0.08f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Head.RenderModel();
+		//coat 0
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f,0.32f-0.1f,0.05f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Coat0.RenderModel();
+		//coat 1
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Coat1.RenderModel();
+		//left_arm
+		//arm 0
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.1f,0.15f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Left_Arm0.RenderModel();
+		//arm 1
+		model = glm::translate(model, glm::vec3(0.25f,0.0f,0.03f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Left_Arm1.RenderModel();
+		//hand
+		model = glm::translate(model, glm::vec3(0.23f,0.0f,-0.025f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Left_Hand.RenderModel();
+		//right_arm
+		//arm 0
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.1f,0.15f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Right_Arm0.RenderModel();
+		//arm 1
+		model = glm::translate(model, glm::vec3(-0.25f,0.0f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Right_Arm1.RenderModel();
+		//hand
+		model = glm::translate(model, glm::vec3(-0.23f,0.0f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Right_Hand.RenderModel();
+		//weapon
+		model = glm::translate(model, glm::vec3(-0.1f,-0.02f,0.0));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Weapon.RenderModel();
+		//left_leg
+		//leg 0
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.08f,-0.21f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Left_Leg0.RenderModel();
+		//leg 1
+		model = glm::translate(model, glm::vec3(0.01f,-0.34f,0.01f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Left_Leg1.RenderModel();
+		//foot
+		model = glm::translate(model, glm::vec3(-0.01f,-0.33f,-0.01f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Left_Foot.RenderModel();
+		//right_leg
+		//leg 0
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.08f,-0.21f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Right_Leg0.RenderModel();
+		//leg 1
+		model = glm::translate(model, glm::vec3(-0.01f,-0.34f,0.01f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Right_Leg1.RenderModel();
+		//foot
+		model = glm::translate(model, glm::vec3(0.01f,-0.33f,-0.01f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Emil_Right_Foot.RenderModel();
+
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex - 1.0f) - 5 * sin((2 * chaosEmeraldsComplex - 1.0f) / 3), -60.0f + 2 * cos(chaosEmeraldsComplex - 1.0f) + 5 * cos((2 * chaosEmeraldsComplex - 1.0f) / 3)));
@@ -952,7 +1110,8 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ChaosEmeraldM.RenderModel();
 
-		// programaciÛn del faro
+		// programaci√≥n del faro
+		// programaciÔøΩn del faro
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(90.0f, -0.75f, -70.0f));
 		model = glm::scale(model, glm::vec3(0.5f + postScaleX, 0.5f + postScaleY, 0.5f + postScaleZ));
@@ -960,7 +1119,8 @@ int main()
 		LampPostLower.RenderModel();
 		//model = modelaux;
 
-		//l·mpara del faro
+		//l√°mpara del faro
+		//lÔøΩmpara del paro
 		model = glm::translate(model, glm::vec3(-0.3f, 7.3f, 0.6f));
 		//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		model = glm::rotate(model, postSpin * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -1106,7 +1266,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Fountain.RenderModel();
 
-		// ¡rboles
+		// √Årboles
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-90.0f, 2.0f, 45.0f));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
@@ -1149,6 +1309,45 @@ int main()
 		Bench.RenderModel();
 
 
+
+		//Cheshire Cat
+		//body
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(10.0f, 5.0f, -10.0f));
+		model = glm::scale(model, glm::vec3(6.0f,6.0f,6.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Body.RenderModel();
+		//head
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f,0.325f,0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Head.RenderModel();
+		//tail
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f,-0.225f,-0.225f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Tail.RenderModel();
+		//left_arm
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.2f,0.24f,-0.05f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Left_Arm.RenderModel();
+		//right_arm
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.2f,0.24f,-0.05f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Right_Arm.RenderModel();
+		//left_leg
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.15f,-0.28f,-0.025f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Left_Leg.RenderModel();
+		//right_leg
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.15f,-0.28f,-0.025f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CheshireCat_Right_Leg.RenderModel();
 
 		if (mainWindow.getMoveLampPost() == 1) {
 
@@ -1239,10 +1438,19 @@ int main()
 			dirTimer = 0.0f;
 		}
 
-		// define la direcciÛn de la luz
+		// define la direcci√≥n de la luz
 		dirTimer += 1.5f;
 		moveDirectionalX = cos(0.0001f * dirTimer);
 		moveDirectionalY = -abs(sin(0.0001f * dirTimer));
+		// define hacia dÔøΩnde se mueve la luz dependiendo de si es de noche o de dÔøΩa
+		if (mainWindow.getDayNight() == 0) {
+			dirTimer += 1.0f;
+		}
+		else {
+			dirTimer -= 1.0f;
+		}
+		moveDirectionalX = cos(0.0001f*dirTimer);
+		moveDirectionalY = -sin(0.0001f* dirTimer);
 
 		// contadores
 		// White Rabbit
