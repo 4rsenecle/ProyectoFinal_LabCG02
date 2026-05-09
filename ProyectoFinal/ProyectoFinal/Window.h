@@ -23,6 +23,8 @@ public:
 	GLint getMoveLampPost() { return moveLampPost; }
 	GLint getMoveCar() { return moveCar; }
 	void setMoveCar(GLint value) { moveCar = value; }
+	GLint getRobotMove() { return robotMove; }
+	void setRobotMove(GLint value) { robotMove = value; }
 	GLint getCamType() { return camType; }
 	void setMoveLampPost(GLint value) { moveLampPost = value; }
 
@@ -43,6 +45,7 @@ private:
 	GLint moveLampPost = 0;
 	GLint moveCar = 0;
 	GLint camType = 1;
+	GLint robotMove = 0;
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);

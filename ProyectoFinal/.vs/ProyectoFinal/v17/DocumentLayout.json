@@ -5,6 +5,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{17454B2F-728D-4BA5-BC47-915E25BE6160}|ProyectoFinal\\ProyectoFinal.vcxproj|C:\\Users\\Asus\\source\\repos\\ProyectoFinal_LabCG02\\ProyectoFinal\\ProyectoFinal\\ProyectoFinal.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{17454B2F-728D-4BA5-BC47-915E25BE6160}|ProyectoFinal\\ProyectoFinal.vcxproj|solutionrelative:ProyectoFinal\\ProyectoFinal.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{17454B2F-728D-4BA5-BC47-915E25BE6160}|ProyectoFinal\\ProyectoFinal.vcxproj|C:\\Users\\Asus\\source\\repos\\ProyectoFinal_LabCG02\\ProyectoFinal\\ProyectoFinal\\Window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{17454B2F-728D-4BA5-BC47-915E25BE6160}|ProyectoFinal\\ProyectoFinal.vcxproj|solutionrelative:ProyectoFinal\\Window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{17454B2F-728D-4BA5-BC47-915E25BE6160}|ProyectoFinal\\ProyectoFinal.vcxproj|C:\\Users\\Asus\\source\\repos\\ProyectoFinal_LabCG02\\ProyectoFinal\\ProyectoFinal\\Window.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{17454B2F-728D-4BA5-BC47-915E25BE6160}|ProyectoFinal\\ProyectoFinal.vcxproj|solutionrelative:ProyectoFinal\\Window.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,11 +22,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Window.h",
+              "DocumentMoniker": "C:\\Users\\Asus\\source\\repos\\ProyectoFinal_LabCG02\\ProyectoFinal\\ProyectoFinal\\Window.h",
+              "RelativeDocumentMoniker": "ProyectoFinal\\Window.h",
+              "ToolTip": "C:\\Users\\Asus\\source\\repos\\ProyectoFinal_LabCG02\\ProyectoFinal\\ProyectoFinal\\Window.h",
+              "RelativeToolTip": "ProyectoFinal\\Window.h",
+              "ViewState": "AQIAABYAAAAAAAAAAAAAAB8AAAALAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-05-09T07:51:11.19Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Window.cpp",
+              "DocumentMoniker": "C:\\Users\\Asus\\source\\repos\\ProyectoFinal_LabCG02\\ProyectoFinal\\ProyectoFinal\\Window.cpp",
+              "RelativeDocumentMoniker": "ProyectoFinal\\Window.cpp",
+              "ToolTip": "C:\\Users\\Asus\\source\\repos\\ProyectoFinal_LabCG02\\ProyectoFinal\\ProyectoFinal\\Window.cpp",
+              "RelativeToolTip": "ProyectoFinal\\Window.cpp",
+              "ViewState": "AQIAAI0AAAAAAAAAAAAAAJMAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-05-09T07:51:09.853Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -28,7 +62,7 @@
               "RelativeDocumentMoniker": "ProyectoFinal\\ProyectoFinal.cpp",
               "ToolTip": "C:\\Users\\Asus\\source\\repos\\ProyectoFinal_LabCG02\\ProyectoFinal\\ProyectoFinal\\ProyectoFinal.cpp",
               "RelativeToolTip": "ProyectoFinal\\ProyectoFinal.cpp",
-              "ViewState": "AQIAADcFAAAAAAAAAAAAAEIFAAAtAAAA",
+              "ViewState": "AQIAAJcFAAAAAAAAAAAiwKkFAAA1AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-05-09T06:08:20.151Z",
               "EditorCaption": ""

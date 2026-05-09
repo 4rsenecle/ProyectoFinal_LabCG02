@@ -88,6 +88,7 @@ Model SteamPunkRobotLeftForeArm;
 Model SteamPunkRobotCannon;
 Model SteamPunkRobotLeftLeg;
 Model SteamPunkRobotRightLeg;
+Model AstroGun;
 
 
 Model ChaosEmeraldG;
@@ -133,12 +134,16 @@ Model CheshireCat_Right_Leg;
 Model CheshireCat_Left_Arm;
 Model CheshireCat_Left_Leg;
 
+Model StreetLight1;
+Model StreetLight2;
+
 Skybox skybox_day;
 Skybox skybox_night;
 
 //materiales
 Material Material_brillante;
 Material Material_opaco;
+Material MaterialMuyBrillante;
 
 
 //Sphere cabeza = Sphere(0.5, 20, 20);
@@ -223,6 +228,17 @@ GLfloat emilShoulderLeft = -70.0f;
 GLfloat cheshireShoulderRight = 70.0f;
 GLfloat cheshireShoulderLeft = -70.0f;
 
+// articulaciones y tiempos de robot
+GLfloat robotRightShoulderArt = 0.0f;
+GLfloat robotRightArmArt = 0.0f;
+GLfloat robotLeftShoulderArt = 0.0f;
+GLfloat robotLeftArmArt = 0.0f;
+GLfloat robotLeftCannonArt = 0.0f;
+GLfloat robotTimer = 0.0f;
+GLfloat robotForward = 0.0f;
+GLfloat robotLeftLegArt = 0.0f;
+GLfloat robotRightLegArt = 0.0f;
+GLfloat robotSpin = 0.0f;
 
 
 // Banderas de cámara
@@ -597,7 +613,7 @@ int main()
 	Spring = Model();
 	Spring.LoadModel("Models/source/Spring/Spring.obj");
 	GoalRing = Model();
-	GoalRing.LoadModel("Models/source/Goal Ring/GoalRing.obj");
+	GoalRing.LoadModel("Models/source/Goal Ring/Goal Ring.obj");
 
 	Tree1 = Model();
 	Tree1.LoadModel("Models/Tree1.obj");
@@ -609,6 +625,12 @@ int main()
 	Fountain.LoadModel("Models/Fountain.obj");
 	Bench = Model();
 	Bench.LoadModel("Models/Bench.obj");
+
+	AstroGun = Model();
+	AstroGun.LoadModel("Models/astrogun.obj");
+
+	StreetLight1 = Model();
+	StreetLight1.LoadModel("Models/StreetLight1.obj");
 	
 
 	// NPCs
@@ -620,8 +642,8 @@ int main()
 	White_RabbitClock.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitClockArm.obj");
 	White_RabbitRight = Model();
 	White_RabbitRight.LoadModel("Models/play-station-2-kingdom-hearts-white-rabbit/source/WhiteRabbitRightArm.obj");
-
 	
+
 
 	std::vector<std::string> skyboxFacesDay, skyboxFacesNight;
 	
@@ -662,6 +684,7 @@ int main()
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
+	MaterialMuyBrillante = Material(6.0f, 256);
 
 
 	//luz direccional, sólo 1 y siempre debe de existir
@@ -673,10 +696,11 @@ int main()
 	unsigned int pointLightCount = 0;
 	//Declaración de primer luz puntual
 	//Declaraci�n de primer luz puntual
-	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f,
-		-6.0f, 1.5f, 1.5f,
-		0.3f, 0.2f, 0.1f);
+	pointLights[0] = PointLight(1.0f, 1.0f, 1.0f,
+		3.0f, 3.0f,
+		25.0f, 7.0f, -60.0f,
+		0.1f, 0.4f, 0.004f
+	);
 	pointLightCount++;
 
 	// luz de la lampara
@@ -686,6 +710,17 @@ int main()
 		1.0f, 0.3f, 0.02f
 	);
 	pointLightCount++;
+
+	// luz del anillo
+	pointLights[2] = PointLight(1.0f, 1.0f, 0.0f,
+		5.0f, 1.0f,
+		80.0f, 3.0f, 80.0f,
+		1.5f, 0.2f, 0.002f
+	);
+	pointLightCount++;
+
+	// luz de las chaos Emeralds
+	
 
 	
 	unsigned int spotLightCount = 0;
@@ -889,7 +924,7 @@ int main()
 		else {
 			shaderList[0].SetPointLights(pointLights, 0);
 		}
-		
+
 
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
@@ -923,14 +958,14 @@ int main()
 		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MaterialMuyBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		Sonic_Body.RenderModel();
 
 		// SONIC: CABEZA
 		model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0f));
 		model = glm::rotate(model, headBob * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MaterialMuyBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		Sonic_Head.RenderModel();
 		model = modelaux;
 
@@ -942,20 +977,20 @@ int main()
 
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MaterialMuyBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftElbow.RenderModel();
 
 		// SONIC: BRAZO IZQUIERDO Y ARTICULACION
 		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 		model = glm::rotate(model, leftArmArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MaterialMuyBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftArm.RenderModel();
 
 		// SONIC: MANO IZQUIERDA
 		model = glm::translate(model, glm::vec3(1.3f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MaterialMuyBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftHand.RenderModel();
 
 		// SONIC: RODILLA IZQUIERDA
@@ -963,20 +998,19 @@ int main()
 		model = glm::translate(model, glm::vec3(0.32f, -0.3f, 0.0f));
 		model = glm::rotate(model, leftLegMove * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MaterialMuyBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftKnee.RenderModel();
 
 		// SONIC: PIERNA IZQUIERDA
 		model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f));
 		model = glm::rotate(model, leftKneeBend * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MaterialMuyBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftLeg.RenderModel();
 
 		model = modelaux;
 
 		// SONIC: CODO DERECHA Y ARTICULACIÓN
-		// SONIC: CODO DERECHA Y ARTICULACI�N
 		model = glm::rotate(model, -180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(0.35f, 0.2f, 0.0f));
 		model = glm::rotate(model, 105.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -984,20 +1018,20 @@ int main()
 
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MaterialMuyBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftElbow.RenderModel();
 
 		// SONIC: BRAZO DERECHA Y ARTICULACION
 		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 		model = glm::rotate(model, rightArmArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MaterialMuyBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftArm.RenderModel();
 
 		// SONIC: MANO DERECHA
 		model = glm::translate(model, glm::vec3(1.3f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MaterialMuyBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftHand.RenderModel();
 
 		// SONIC: RODILLA DERECHA
@@ -1005,32 +1039,32 @@ int main()
 		model = glm::translate(model, glm::vec3(-0.32f, -0.3f, 0.0f));
 		model = glm::rotate(model, rightLegMove * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MaterialMuyBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftKnee.RenderModel();
 
 		// SONIC: PIERNA DERECHA
 		model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f));
 		model = glm::rotate(model, rightKneeBend * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MaterialMuyBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftLeg.RenderModel();
 
 		// EMIL
 		//body
 		model = glm::mat4(1.0);
-		model = glm::translate(model,glm::vec3(-120.0f,7.0f,90.0f));
-		model = glm::scale(model, glm::vec3(10.0f,10.0f,10.0f));
+		model = glm::translate(model, glm::vec3(-120.0f, 7.0f, 90.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Body.RenderModel();
 		//head
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f,0.29f,0.08f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.29f, 0.08f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Head.RenderModel();
 		//coat 0
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f,0.32f-0.1f,0.05f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.32f - 0.1f, 0.05f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Coat0.RenderModel();
 		//coat 1
@@ -1039,63 +1073,63 @@ int main()
 		//left_arm
 		//arm 0
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.1f,0.15f,0.0f));
+		model = glm::translate(model, glm::vec3(0.1f, 0.15f, 0.0f));
 		model = glm::rotate(model, emilShoulderLeft * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Left_Arm0.RenderModel();
 		//arm 1
-		model = glm::translate(model, glm::vec3(0.25f,0.0f,0.03f));
+		model = glm::translate(model, glm::vec3(0.25f, 0.0f, 0.03f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Left_Arm1.RenderModel();
 		//hand
-		model = glm::translate(model, glm::vec3(0.23f,0.0f,-0.025f));
+		model = glm::translate(model, glm::vec3(0.23f, 0.0f, -0.025f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Left_Hand.RenderModel();
 		//right_arm
 		//arm 0
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(-0.1f,0.15f,0.0f));
+		model = glm::translate(model, glm::vec3(-0.1f, 0.15f, 0.0f));
 		model = glm::rotate(model, emilShoulderRight * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Right_Arm0.RenderModel();
 		//arm 1
-		model = glm::translate(model, glm::vec3(-0.25f,0.0f,0.0f));
+		model = glm::translate(model, glm::vec3(-0.25f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Right_Arm1.RenderModel();
 		//hand
-		model = glm::translate(model, glm::vec3(-0.23f,0.0f,0.0f));
+		model = glm::translate(model, glm::vec3(-0.23f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Right_Hand.RenderModel();
 		//weapon
-		model = glm::translate(model, glm::vec3(-0.1f,-0.02f,0.0));
+		model = glm::translate(model, glm::vec3(-0.1f, -0.02f, 0.0));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Weapon.RenderModel();
 		//left_leg
 		//leg 0
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.08f,-0.21f,0.0f));
+		model = glm::translate(model, glm::vec3(0.08f, -0.21f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Left_Leg0.RenderModel();
 		//leg 1
-		model = glm::translate(model, glm::vec3(0.01f,-0.34f,0.01f));
+		model = glm::translate(model, glm::vec3(0.01f, -0.34f, 0.01f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Left_Leg1.RenderModel();
 		//foot
-		model = glm::translate(model, glm::vec3(-0.01f,-0.33f,-0.01f));
+		model = glm::translate(model, glm::vec3(-0.01f, -0.33f, -0.01f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Left_Foot.RenderModel();
 		//right_leg
 		//leg 0
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(-0.08f,-0.21f,0.0f));
+		model = glm::translate(model, glm::vec3(-0.08f, -0.21f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Right_Leg0.RenderModel();
 		//leg 1
-		model = glm::translate(model, glm::vec3(-0.01f,-0.34f,0.01f));
+		model = glm::translate(model, glm::vec3(-0.01f, -0.34f, 0.01f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Right_Leg1.RenderModel();
 		//foot
-		model = glm::translate(model, glm::vec3(0.01f,-0.33f,-0.01f));
+		model = glm::translate(model, glm::vec3(0.01f, -0.33f, -0.01f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Right_Foot.RenderModel();
 
@@ -1142,7 +1176,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ChaosEmeraldM.RenderModel();
 
-		
+
 		// programaci�n del faro
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(90.0f, -0.75f, -70.0f));
@@ -1158,7 +1192,16 @@ int main()
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		LampPostUpper.RenderModel();
-		
+
+		// anillo de meta
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(80.0f, sin(SteamPunkClockFloat) * -2.0f, 80.0f));
+		model = glm::rotate(model, SteamPunkClockFloat * 50.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f,0.5f,0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		GoalRing.RenderModel();
+		//model = modelaux;
+
 
 		// Resorte de Sonic
 		model = glm::mat4(1.0);
@@ -1208,9 +1251,6 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Balloon_Gift_Propeller2.RenderModel();
 
-		// Chao Key
-
-		// Goal Ring
 
 		// White Rabbit
 		model = glm::mat4(1.0);
@@ -1277,18 +1317,80 @@ int main()
 		// Carro Steampunk
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f + carroX, 3.5f, 0.0f + carroZ));
-		model = glm::rotate(model, (carroRotate) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(2.0f + carroScaleX, 2.0f + carroScaleY, 2.0f + carroScaleZ));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		SteamPunkCars.RenderModel();
-
-		// Robot Steampunk
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f + carroX, 3.5f, 0.0f + carroZ));
 		model = glm::rotate(model, (carroRotate)*toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(2.0f + carroScaleX, 2.0f + carroScaleY, 2.0f + carroScaleZ));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SteamPunkCars.RenderModel();
+
+		// Astrogun
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(120.0f, 3.5f, 35.0f));
+		model = glm::rotate(model, (carroRotate)*toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		AstroGun.RenderModel();
+
+		// Robot Steampunk
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f + robotForward, 11.5f, 70.0f));
+		model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, robotSpin * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkRobot.RenderModel();
+		modelaux = model;
+
+		model = glm::translate(model, glm::vec3(1.67f, 0.5f, 0.0f));
+		//model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, 90.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, robotLeftShoulderArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkRobotLeftArm.RenderModel();
+
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, robotLeftArmArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkRobotLeftForeArm.RenderModel();
+
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, robotLeftCannonArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkRobotCannon.RenderModel();
+
+		model = modelaux;
+
+		model = glm::translate(model, glm::vec3(-1.67f, 0.5f, 0.0f));
+		model = glm::rotate(model, 45.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, 45.0f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, robotRightShoulderArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkRobotRightArm.RenderModel();
+
+		model = glm::translate(model, glm::vec3(-2.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, 22.5f * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, robotRightArmArt * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkRobotRightForeArm.RenderModel();
+
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-1.0f, -1.7f, 0.0f));
+		model = glm::rotate(model, robotRightLegArt * toRadians, glm::vec3(1.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkRobotRightLeg.RenderModel();
+
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(1.0f, -1.7f, 0.0f));
+		model = glm::rotate(model, robotLeftLegArt * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		//model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkRobotLeftLeg.RenderModel();
+
+
 
 		// Fuente
 		model = glm::mat4(1.0);
@@ -1338,6 +1440,16 @@ int main()
 		model = glm::translate(model, glm::vec3(2.0f, -0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Bench.RenderModel();
+
+		// Arbustos
+
+		// Luces
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(30.0f, -2.0f, 55.0f));
+		model = glm::rotate(model, -90.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		StreetLight1.RenderModel();
 
 
 
@@ -1458,6 +1570,43 @@ int main()
 				carroScaleZ = carroScaleX = carroScaleY = carroX = carroY = 0.0f;
 				carroZ = -15.0f;
 				carroRotate = -90.0f;
+			}
+		}
+
+		if (mainWindow.getRobotMove() == 1) {
+			robotTimer += 1.5f;
+			if (robotTimer >= 0.0f && robotTimer <= 30.0f) {
+				robotLeftShoulderArt -= 4.5f;
+			}
+
+			if (robotTimer >= 30.0f && robotTimer <= 780.0f) {
+				robotRightShoulderArt = sin((robotTimer - 60.0f) *0.03f) * 50.0f;
+				robotForward -= 0.1f;
+				robotLeftLegArt = sin((robotTimer - 30.0f) *0.03) * 50.0f;
+				robotRightLegArt = -sin((robotTimer - 30.0f) *0.03) * 50.0f;
+			}
+
+			if (robotTimer >= 780.0f && robotTimer <= 810.0f) {
+				robotLeftShoulderArt += 4.5f;
+				robotSpin += 9.0f;
+			}
+
+			if (robotTimer >= 810.0f && robotTimer <= 1560.0f) {
+				robotRightShoulderArt = sin(robotTimer * 0.03f) * 50.0f;
+				robotForward += 0.1f;
+				robotLeftLegArt = sin((robotTimer - 60.0f) * 0.03) * 50.0f;
+				robotRightLegArt = -sin((robotTimer - 60.0f) * 0.03) * 50.0f;
+			}
+
+			if (robotTimer >= 1560.0f && robotTimer <= 1590.0f) {
+				robotSpin += 9.0f;
+			}
+
+			if (robotTimer >= 1590.0f) {
+				robotTimer = 0;
+				robotRightShoulderArt = robotForward = robotLeftLegArt = robotRightLegArt = 0.0f;
+				robotSpin = leftShoulderArt = 0.0f;
+				mainWindow.setRobotMove(0);
 			}
 		}
 

@@ -144,6 +144,9 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	if (key == GLFW_KEY_C && action == GLFW_PRESS) {
 		theWindow->moveCar = 1;
 	}
+	if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+		theWindow->robotMove = 1;
+	}
 
 
 
