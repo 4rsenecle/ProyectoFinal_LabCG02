@@ -1,11 +1,11 @@
 ﻿  ProyectoFinal.cpp
 C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
 C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(220,24): warning C4267: 'inicializando': conversión de 'size_t' a 'unsigned int'; posible pérdida de datos
-C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(598,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(600,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1181,59): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1182,46): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1224,53): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1225,81): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(230,24): warning C4267: 'inicializando': conversión de 'size_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(608,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(610,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1199,59): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1200,46): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1242,53): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1243,81): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
   ProyectoFinal.vcxproj -> C:\Users\Asus\Desktop\Todo\Git Programming 2\ProyectoFinal_LabCG02\ProyectoFinal\x64\Debug\ProyectoFinal.exe

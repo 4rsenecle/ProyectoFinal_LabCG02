@@ -77,6 +77,16 @@ Model SteamPunkClock;
 Model SteamPunkHammer;
 Model SteamPunkChair;
 Model SteamPunkCars;
+Model SteamPunkRobot;
+// Brazo derecho e izquierdo están al revés xddddd
+Model SteamPunkRobotRightArm;
+Model SteamPunkRobotRightForeArm;
+Model SteamPunkRobotLeftArm;
+Model SteamPunkRobotLeftForeArm;
+Model SteamPunkRobotCannon;
+Model SteamPunkRobotLeftLeg;
+Model SteamPunkRobotRightLeg;
+
 
 Model ChaosEmeraldG;
 Model ChaosEmeraldR;
@@ -458,6 +468,23 @@ int main()
 	SteamPunkChair.LoadModel("Models/SteamPunkChair.obj");
 	SteamPunkCars = Model();
 	SteamPunkCars.LoadModel("Models/SteamPunkCar.obj");
+	SteamPunkRobot = Model();
+	SteamPunkRobot.LoadModel("Models/SteamPunkRobot.obj");
+	SteamPunkRobotRightArm = Model(); 
+	SteamPunkRobotRightArm.LoadModel("Models/SteamPunkRobotLeftArm.obj");
+	SteamPunkRobotRightForeArm = Model();
+	SteamPunkRobotRightForeArm.LoadModel("Models/SteamPunkRobotLeftForeArm.obj");
+	SteamPunkRobotLeftArm = Model();
+	SteamPunkRobotLeftArm.LoadModel("Models/SteamPunkRobotRightArm.obj");
+	SteamPunkRobotLeftForeArm = Model();
+	SteamPunkRobotLeftForeArm.LoadModel("Models/SteamPunkRobotRightForeArm.obj");
+	SteamPunkRobotCannon = Model();
+	SteamPunkRobotCannon.LoadModel("Models/SteamPunkRobotRightCannon.obj");
+	SteamPunkRobotLeftLeg = Model();
+	SteamPunkRobotLeftLeg.LoadModel("Models/SteamPunkRobotLeftLeg.obj");
+	SteamPunkRobotRightLeg = Model();
+	SteamPunkRobotRightLeg.LoadModel("Models/SteamPunkRobotRightLeg.obj");
+
 	ChaosEmeraldG = Model();
 	ChaosEmeraldG.LoadModel("Models/source/GreenChaosEmerald.obj");
 	ChaosEmeraldY = Model();
@@ -1060,6 +1087,14 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f + carroX, 3.5f, 0.0f + carroZ));
 		model = glm::rotate(model, (carroRotate) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(2.0f + carroScaleX, 2.0f + carroScaleY, 2.0f + carroScaleZ));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SteamPunkCars.RenderModel();
+
+		// Robot Steampunk
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f + carroX, 3.5f, 0.0f + carroZ));
+		model = glm::rotate(model, (carroRotate)*toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(2.0f + carroScaleX, 2.0f + carroScaleY, 2.0f + carroScaleZ));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SteamPunkCars.RenderModel();
