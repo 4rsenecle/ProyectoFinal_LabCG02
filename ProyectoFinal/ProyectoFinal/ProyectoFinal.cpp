@@ -123,20 +123,6 @@ Model Emil_Right_Hand;
 Model Emil_Left_Foot;
 Model Emil_Right_Foot;
 
-Model ChaosEmeraldG;
-Model ChaosEmeraldR;
-Model ChaosEmeraldM;
-Model ChaosEmeraldB;
-Model ChaosEmeraldGrey;
-Model ChaosEmeraldY;
-Model ChaosEmeraldC;
-Model Spring;
-Model ChaoKey;
-Model GoalRing;
-
-Model Fountain;
-Model Tree1, Tree2, Tree3;
-Model Bench;
 
 
 Model CheshireCat_Body;
@@ -174,8 +160,6 @@ GLfloat moveDirectionalY = 0.0f;
 
 // movimiento de la c�mara con Sonic
 glm::vec3 posicionSonic = glm::vec3(70.0f, 3.0f, -65.0f);
-// movimiento de la c�mara con Sonic
-glm::vec3 posicionSonic = glm::vec3(30.0f, 3.0f, 15.0f);
 GLfloat xChange = 0.0f;
 GLfloat sonicVista = 0.0f;
 glm::vec3 sonicFrente;
@@ -231,11 +215,17 @@ GLfloat carroScaleZ = 0.0f;
 GLfloat carroRotate = -90.0f;
 GLfloat steamPunkTimer = 0.0f;
 
+// articulaciones de Emil
+GLfloat emilShoulderRight = 70.0f;
+GLfloat emilShoulderLeft = -70.0f;
+
+// articulaciones de Cheshire Cat
+GLfloat cheshireShoulderRight = 70.0f;
+GLfloat cheshireShoulderLeft = -70.0f;
+
 
 
 // Banderas de cámara
-// Banderas de cámara
-// Banderas de c�mara
 GLint cam1 = 0;
 GLint cam2 = 0;
 GLint cam3 = 0;
@@ -495,6 +485,59 @@ int main()
 	SonicLeftKnee.LoadModel("Models/rewrite-sonic/source/SonicLeftKnee.obj");
 	SonicLeftLeg = Model();
 	SonicLeftLeg.LoadModel("Models/rewrite-sonic/source/SonicLeftLeg.obj");
+
+	// Emil
+	Emil_Body = Model();
+	Emil_Body.LoadModel("Models/emil/body.obj");
+	Emil_Head = Model();
+	Emil_Head.LoadModel("Models/emil/head.obj");
+	Emil_Coat0 = Model();
+	Emil_Coat0.LoadModel("Models/emil/coat_0.obj");
+	Emil_Coat1 = Model();
+	Emil_Coat1.LoadModel("Models/emil/coat_1.obj");
+	Emil_Weapon = Model();
+	Emil_Weapon.LoadModel("Models/emil/weapon.obj");
+	Emil_Left_Leg0 = Model();
+	Emil_Left_Leg0.LoadModel("Models/emil/left_leg_0.obj");
+	Emil_Left_Leg1 = Model();
+	Emil_Left_Leg1.LoadModel("Models/emil/left_leg_1.obj");
+	Emil_Right_Leg0 = Model();
+	Emil_Right_Leg0.LoadModel("Models/emil/right_leg_0.obj");
+	Emil_Right_Leg1 = Model();
+	Emil_Right_Leg1.LoadModel("Models/emil/right_leg_1.obj");
+	Emil_Left_Arm0 = Model();
+	Emil_Left_Arm0.LoadModel("Models/emil/left_arm_0.obj");
+	Emil_Left_Arm1 = Model();
+	Emil_Left_Arm1.LoadModel("Models/emil/left_arm_1.obj");
+	Emil_Right_Arm0 = Model();
+	Emil_Right_Arm0.LoadModel("Models/emil/right_arm_0.obj");
+	Emil_Right_Arm1 = Model();
+	Emil_Right_Arm1.LoadModel("Models/emil/right_arm_1.obj");
+	Emil_Left_Hand = Model();
+	Emil_Left_Hand.LoadModel("Models/emil/left_hand.obj");
+	Emil_Right_Hand = Model();
+	Emil_Right_Hand.LoadModel("Models/emil/right_hand.obj");
+	Emil_Left_Foot = Model();
+	Emil_Left_Foot.LoadModel("Models/emil/left_foot.obj");
+	Emil_Right_Foot = Model();
+	Emil_Right_Foot.LoadModel("Models/emil/right_foot.obj");
+
+	// Cheshire Cat
+	CheshireCat_Body = Model();
+	CheshireCat_Body.LoadModel("Models/cheshire-cat/body.obj");
+	CheshireCat_Tail = Model();
+	CheshireCat_Tail.LoadModel("Models/cheshire-cat/tail.obj");
+	CheshireCat_Head = Model();
+	CheshireCat_Head.LoadModel("Models/cheshire-cat/head.obj");
+	CheshireCat_Right_Arm = Model();
+	CheshireCat_Right_Arm.LoadModel("Models/cheshire-cat/right_arm.obj");
+	CheshireCat_Right_Leg = Model();
+	CheshireCat_Right_Leg.LoadModel("Models/cheshire-cat/right_leg.obj");
+	CheshireCat_Left_Arm = Model();
+	CheshireCat_Left_Arm.LoadModel("Models/cheshire-cat/left_arm.obj");
+	CheshireCat_Left_Leg = Model();
+	CheshireCat_Left_Leg.LoadModel("Models/cheshire-cat/left_leg.obj");
+
 	
 
 	// MODELOS: Elementos 
@@ -708,8 +751,7 @@ int main()
 				if (keys[GLFW_KEY_S]) posicionSonic -= sonicFrente * sonicSpeed;
 				if (keys[GLFW_KEY_A]) posicionSonic -= sonicDerecha * sonicSpeed;
 				if (keys[GLFW_KEY_D]) posicionSonic += sonicDerecha * sonicSpeed;
-				walkCycle += 0.01f;
-				printf("%f\n", walkCycle);
+				walkCycle += 0.05f;
 				leftShoulderArt = sin(walkCycle) * 30.0f;
 				leftArmArt = sin(walkCycle) * 60.0f;
 				rightShoulderArt = -sin(walkCycle) * 30.0f;
@@ -973,22 +1015,10 @@ int main()
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		SonicLeftLeg.RenderModel();
 
-		// Chaos Emeralds
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex) - 5 * sin((2 * chaosEmeraldsComplex) / 3), -60.0f + +2 * cos(chaosEmeraldsComplex) + 5 * cos((2 * chaosEmeraldsComplex) / 3)));
-		model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ChaosEmeraldG.RenderModel();
-		// Chaos Emeralds
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex) - 5 * sin((2 * chaosEmeraldsComplex) / 3), -60.0f + +2 * cos(chaosEmeraldsComplex) + 5 * cos((2 * chaosEmeraldsComplex) / 3)));
-		model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ChaosEmeraldG.RenderModel();
 		// EMIL
 		//body
 		model = glm::mat4(1.0);
-		model = glm::translate(model,glm::vec3(-10.0f,14.0f,10.0f));
+		model = glm::translate(model,glm::vec3(-120.0f,7.0f,90.0f));
 		model = glm::scale(model, glm::vec3(10.0f,10.0f,10.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1010,6 +1040,7 @@ int main()
 		//arm 0
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.1f,0.15f,0.0f));
+		model = glm::rotate(model, emilShoulderLeft * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Left_Arm0.RenderModel();
 		//arm 1
@@ -1024,6 +1055,7 @@ int main()
 		//arm 0
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-0.1f,0.15f,0.0f));
+		model = glm::rotate(model, emilShoulderRight * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Right_Arm0.RenderModel();
 		//arm 1
@@ -1067,6 +1099,12 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Emil_Right_Foot.RenderModel();
 
+		// Chaos Emeralds
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex) - 5 * sin((2 * chaosEmeraldsComplex) / 3), -60.0f + +2 * cos(chaosEmeraldsComplex) + 5 * cos((2 * chaosEmeraldsComplex) / 3)));
+		model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ChaosEmeraldG.RenderModel();
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(25.0f, 7.0f + 2 * sin(chaosEmeraldsComplex - 1.0f) - 5 * sin((2 * chaosEmeraldsComplex - 1.0f) / 3), -60.0f + 2 * cos(chaosEmeraldsComplex - 1.0f) + 5 * cos((2 * chaosEmeraldsComplex - 1.0f) / 3)));
@@ -1104,9 +1142,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ChaosEmeraldM.RenderModel();
 
-		// programación del faro
-
-		// programación del faro
+		
 		// programaci�n del faro
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(90.0f, -0.75f, -70.0f));
@@ -1115,7 +1151,6 @@ int main()
 		LampPostLower.RenderModel();
 		//model = modelaux;
 
-		//l�mpara del faro
 		//l�mpara del paro
 		model = glm::translate(model, glm::vec3(-0.3f, 7.3f, 0.6f));
 		//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
@@ -1179,7 +1214,7 @@ int main()
 
 		// White Rabbit
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(130.5f, 3.0f, -85.0f));
+		model = glm::translate(model, glm::vec3(130.5f, 1.0f, -85.0f));
 		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1309,7 +1344,8 @@ int main()
 		//Cheshire Cat
 		//body
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(10.0f, 5.0f, -10.0f));
+		model = glm::translate(model, glm::vec3(-60.0f, 2.5f, 15.0f));
+		model = glm::rotate(model, -45.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(6.0f,6.0f,6.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1327,11 +1363,13 @@ int main()
 		//left_arm
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.2f,0.24f,-0.05f));
+		model = glm::rotate(model, cheshireShoulderLeft * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		CheshireCat_Left_Arm.RenderModel();
 		//right_arm
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-0.2f,0.24f,-0.05f));
+		model = glm::rotate(model, cheshireShoulderRight * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		CheshireCat_Right_Arm.RenderModel();
 		//left_leg
@@ -1347,38 +1385,38 @@ int main()
 
 		if (mainWindow.getMoveLampPost() == 1) {
 
-			spinTimer += 1.0f;
+			spinTimer += 3.0f;
 
 			if (spinTimer < 360) {
-				postScaleX += 0.0002f;
-				postScaleY -= 0.0004f;
-				postScaleZ += 0.0002f;
+				postScaleX += 0.0006f;
+				postScaleY -= 0.0012f;
+				postScaleZ += 0.0006f;
 			}
 
 			if (spinTimer > 360 && spinTimer < 1440) {
 				if (postScaleX > 0) {
-					postScaleX -= 0.002f;
+					postScaleX -= 0.006f;
 				}
 				if (postScaleY < 0) {
-					postScaleY += 0.004f;
+					postScaleY += 0.012f;
 				}
 				if (postScaleZ > 0) {
-					postScaleZ -= 0.002f;
+					postScaleZ -= 0.006f;
 				}
 
 				if (spinTimer > 396 && spinTimer < 480) {
-					postScaleX -= 0.003f;
-					postScaleY += 0.006f;
-					postScaleZ -= 0.003f;
+					postScaleX -= 0.009f;
+					postScaleY += 0.018f;
+					postScaleZ -= 0.009f;
 				}
 
 				if (spinTimer > 480 && spinTimer < 600) {
-					postScaleX += 0.003f;
-					postScaleY -= 0.006f;
-					postScaleZ += 0.003f;
+					postScaleX += 0.009f;
+					postScaleY -= 0.018f;
+					postScaleZ += 0.009f;
 				}
 
-				postSpin += 2.0f;
+				postSpin += 6.0f;
 				spinLightX = 1.75f * -sin(1 * postSpin * toRadians);
 				spinLightY = 1.75f * cos(1 * postSpin * toRadians) - 1.75f;
 				pointLights[1].updatePosition(glm::vec3(90.0f + spinLightX, 8.0f + spinLightY, -70.0f));
@@ -1407,7 +1445,7 @@ int main()
 		}
 
 		if (mainWindow.getMoveCar() == 1) {
-			steamPunkTimer += 0.5f;
+			steamPunkTimer += 2.0f;
 			carroScaleZ = carroScaleX = sin(steamPunkTimer * 0.04f)*0.4;
 			carroScaleY = -sin(steamPunkTimer * 0.04f)*0.4;
 			carroRotate = steamPunkTimer * 0.57f - 90.0f;
@@ -1454,19 +1492,19 @@ int main()
 
 		// contadores
 		// White Rabbit
-		whiteRabbitHeadBob += 0.1f;
+		whiteRabbitHeadBob += 0.5f;
 
 		// Chaos Emeralds
-		chaosEmeraldsComplex += 0.01f;
+		chaosEmeraldsComplex += 0.05f;
 
 		// Reloj Steampunk
-		SteamPunkClockFloat += 0.001f;
+		SteamPunkClockFloat += 0.01f;
 
 		// Balloon Gift
-		lemniscateTimer += 0.003f;
+		lemniscateTimer += 0.009f;
 		lemniscate_X = ((a*sqrt(2)*cos(lemniscateTimer))/1+pow(sin(lemniscateTimer), 2));
 		lemniscate_Y = ((a * sqrt(2) * cos(lemniscateTimer)*sin(lemniscateTimer)) / 1 + pow(sin(lemniscateTimer), 2));
-		helixSpin += 2.0f;
+		helixSpin += 4.0f;
 
 
 		glUseProgram(0);
