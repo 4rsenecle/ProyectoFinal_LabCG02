@@ -1,0 +1,42 @@
+# Blender 5.1.1 MTL File: 'None'
+# www.blender.org
+
+newmtl Pillow_01
+Ns 319.999939
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd -o 0 -1 0 Seat_Low_Pillow_BaseColor.1001.png
+
+newmtl Seat_01
+Ns 319.999939
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd -o 0 -1 0 Seat_Low_Seat_BaseColor.1001.png
+
+newmtl Seat_02
+Ns 319.999939
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd -o 0 -1 0 Seat_Low_Seat_BaseColor.1002.png
+
+newmtl Seat_03
+Ns 319.999939
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd -o 0 -1 0 Seat_Low_Seat_BaseColor.1003.png

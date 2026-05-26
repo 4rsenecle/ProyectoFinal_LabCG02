@@ -1,0 +1,16 @@
+﻿  ProyectoFinal.cpp
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(291,24): warning C4267: 'inicializando': conversión de 'size_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(786,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(788,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1689,59): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1690,46): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1713,55): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1714,57): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1725,56): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1726,58): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1782,53): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\ProyectoFinal\ProyectoFinal.cpp(1783,81): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
+  ProyectoFinal.vcxproj -> C:\Users\Asus\source\repos\ProyectoFinal_LabCG02\ProyectoFinal\x64\Debug\ProyectoFinal.exe

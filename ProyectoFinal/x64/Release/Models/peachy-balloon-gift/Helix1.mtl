@@ -1,0 +1,26 @@
+# Blender 5.1.1 MTL File: 'BalloonGift.blend'
+# www.blender.org
+
+newmtl airship
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd airship_BC.jpg
+map_Ns airship_R.jpg
+map_refl airship_MT.jpg
+map_Ke airship_EM.jpg
+map_Bump -bm 1.000000 airship_N.jpg
+
+newmtl trims
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd trims_BC.jpg
+map_Ns trims_R.jpg
+map_refl trims_MT.jpg
+map_Bump -bm 1.000000 trims_N.jpg

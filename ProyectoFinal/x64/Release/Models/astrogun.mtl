@@ -1,0 +1,34 @@
+# Blender 5.1.1 MTL File: 'None'
+# www.blender.org
+
+newmtl blinn1SG
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd corps_dif.jpg
+map_Bump corps_NORM.jpg -bm 1
+
+newmtl blinn2SG
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd hublot.jpg
+
+newmtl lambert3SG
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd fut_dif.jpg
+map_Bump fut_NORM.jpg -bm 1
